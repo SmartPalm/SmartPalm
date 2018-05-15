@@ -22,7 +22,9 @@ public class LookAtCamera : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         target = GameObject.Find("ARCamera").transform;
-        lateTarget = target;
+
+        lateYAddOffset = target.eulerAngles.y + additionOffset;
+        lateYSubOffset = target.eulerAngles.y - subtractionOffset;
     }
 	
 	// Update is called once per frame
@@ -32,8 +34,7 @@ public class LookAtCamera : MonoBehaviour {
         yRot = target.eulerAngles.y;
         zRot = target.eulerAngles.z;
         newRot = new Vector3(0, yRot, 0);
-        lateYAddOffset = lateTarget.eulerAngles.y + additionOffset;
-        lateYSubOffset = lateTarget.eulerAngles.y - subtractionOffset;
+        
 
         if (lookAtTargetStrictly)
         {
@@ -49,8 +50,9 @@ public class LookAtCamera : MonoBehaviour {
             }
             
         }
-        lateTarget = target;
 
+        lateYAddOffset = target.eulerAngles.y + additionOffset;
+        lateYSubOffset = target.eulerAngles.y - subtractionOffset;
         #region TastaturEingabeHilfe
         if (Input.GetKeyDown("h"))
         {
