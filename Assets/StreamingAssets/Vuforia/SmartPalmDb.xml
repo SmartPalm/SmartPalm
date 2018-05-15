@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
   <Tracking>
+    <ImageTarget name="wave_sp" size="1.000000 0.562500" />
+    <ImageTarget name="stripes_sp" size="1.000000 0.562500" />
+    <ImageTarget name="bunt_sp" size="1.000000 0.562500" />
     <ImageTarget name="strange" size="1.000000 0.722815" />
     <ImageTarget name="arrow_tracker" size="1.000000 0.562500" />
     <ImageTarget name="logo" size="0.100000 0.056250" />
