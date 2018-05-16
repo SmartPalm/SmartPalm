@@ -14,6 +14,16 @@ public class TouchController : MonoBehaviour {
     private static int X_SWIPE_DIFFERENCE_SMALL = 35;
     private static int Y_SWIPE_DIFFERENCE = 35;
 
+    //listener events
+    public static string EVENT_DOUBLE_TAP = "doubleTap";
+    public static string EVENT_SCROLL_UP = "scrollUp";
+    public static string EVENT_SCROLL_DOWN = "scrollDown";
+    public static string EVENT_SCROLL_RIGHT = "scrollRight";
+    public static string EVENT_SCROLL_LEFT = "scrollLeft";
+
+    private static string ORIENTATION_LANDSCAPE = "orientationLandscape";
+    private static string ORIENTATION_PORTRAIT = "orientationPortrait";
+
     //private GameObject countField;
     private Text counter, position, direction, eventText, orientation, position3;
     Vector2 startTouch1, startTouch2, startTouch3;
@@ -44,7 +54,8 @@ public class TouchController : MonoBehaviour {
         switchLayer = false;
 
 
-        //EventManager.StartListening("doubleTap", doubleTapText);
+        //Subscribe to events using the EventManager:
+        //EventManager.StartListening("scrollUp", scrollUp);
     }
 
     // Update is called once per frame
@@ -62,8 +73,6 @@ public class TouchController : MonoBehaviour {
         {
             touchWith3Finger();
         }
-
-        //EventManager.StartListening("scrollUp", scrollUp);
     }
 
     /*void scrollUp(float parameter)
@@ -75,7 +84,7 @@ public class TouchController : MonoBehaviour {
 
     // 3 Finger touch gestures
     void touchWith3Finger()
-    {       
+    {
         bool start = false;
 
         //direction.text = "X: " + switchXOrientation + "    Y: " + switchYOrientation;
@@ -99,7 +108,7 @@ public class TouchController : MonoBehaviour {
                 //eventText.text = "Start 2: " + startTouch2;
                 startTouch3 = touch3.position;
                 //position3.text = "Start 3: " + startTouch3;
-                
+
 
                 if(touch1.position.x > touch2.position.x)               // touch1.x is bigger touch2.x
                 {
@@ -218,14 +227,14 @@ public class TouchController : MonoBehaviour {
                     Screen.orientation = ScreenOrientation.LandscapeLeft;
                     switchXOrientation = switchYOrientation = false;
                     //orientation.text = "Landscape";
-                    EventManager.TriggerEvent("orientationLandscape", 0);
+                    EventManager.TriggerEvent(ORIENTATION_LANDSCAPE, 0);
                 }
                 else if ((startTouch1.x - touch1.position.x) < -X_SWIPE_DIFFERENCE && (startTouch2.x - touch2.position.x) < -X_SWIPE_DIFFERENCE && (startTouch3.x - touch3.position.x) < -X_SWIPE_DIFFERENCE && Screen.orientation == ScreenOrientation.Landscape)
                 {
                     Screen.orientation = ScreenOrientation.Portrait;
                     switchXOrientation = switchYOrientation = false;
                     //orientation.text = "Portrait";
-                    EventManager.TriggerEvent("orientationPortrait", 0);
+                    EventManager.TriggerEvent(ORIENTATION_PORTRAIT, 0);
                 }
             }
 
@@ -251,7 +260,7 @@ public class TouchController : MonoBehaviour {
 
             if (touch1.tapCount == 2)
             {
-                EventManager.TriggerEvent("doubleTap", 0);
+                EventManager.TriggerEvent(EVENT_DOUBLE_TAP, 0);
                 return;
             }
             if ((touch1.position.y - startTouch1.y) > Y_SWIPE_DIFFERENCE)
@@ -259,7 +268,7 @@ public class TouchController : MonoBehaviour {
                 if (touch1.deltaPosition.x < 15 && touch1.deltaPosition.x > -15)
                 {
                     //direction.text = "Scrollen nach oben";
-                    EventManager.TriggerEvent("scrollUp", touch1.deltaPosition.y);
+                    EventManager.TriggerEvent(EVENT_SCROLL_UP, touch1.deltaPosition.y);
                 }
             }
             else if ((touch1.position.y - startTouch1.y) < -Y_SWIPE_DIFFERENCE)
@@ -267,24 +276,24 @@ public class TouchController : MonoBehaviour {
                 if (touch1.deltaPosition.x < 15 && touch1.deltaPosition.x > -15)
                 {
                     //direction.text = "Scrollen nach unten";
-                    EventManager.TriggerEvent("scrollDown", touch1.deltaPosition.y);
+                    EventManager.TriggerEvent(EVENT_SCROLL_DOWN, touch1.deltaPosition.y);
                 }
             }
             else if((touch1.position.x - startTouch1.x) > X_SWIPE_DIFFERENCE_SMALL)
             {
                 if(touch1.deltaPosition.y < 15 && touch1.deltaPosition.y > -15)
                 {
-                    EventManager.TriggerEvent("scrollRight", touch1.deltaPosition.x);
+                    EventManager.TriggerEvent(EVENT_SCROLL_RIGHT, touch1.deltaPosition.x);
                 }
             }
             else if((touch1.position.x - startTouch1.x) < -X_SWIPE_DIFFERENCE_SMALL)
             {
                 if (touch1.deltaPosition.y < 15 && touch1.deltaPosition.y > -15)
                 {
-                    EventManager.TriggerEvent("scrollLeft", touch1.deltaPosition.x);
+                    EventManager.TriggerEvent(EVENT_SCROLL_LEFT, touch1.deltaPosition.x);
                 }
             }
-        }        
+        }
     }
 
     // 2 Finger touch gestures
@@ -457,4 +466,3 @@ public class TouchController : MonoBehaviour {
             counter.text = "User has " + fingerCount + " finger(s) touching the screen";
     }*/
 }
- 
