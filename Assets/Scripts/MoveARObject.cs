@@ -56,10 +56,6 @@ public class MoveARObject : MonoBehaviour
                     //textField.text = "Object Pickup successful, object: " + pickedObject.name;
                     for (int counter = 0; counter < FolderManager.Children.Count; counter++)
                     {
-                        if (lastPlanePoint == null)
-                        {
-                            lastPlanePoint = planePoint;
-                        }
                         FolderManager.Children[counter].transform.position = planePoint - lastPlanePoint;
                         lastPlanePoint = planePoint;
                     }

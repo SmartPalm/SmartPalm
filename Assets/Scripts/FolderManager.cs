@@ -8,7 +8,9 @@ public class FolderManager : MonoBehaviour
     public static List<GameObject> Children;
     private GameObject certainFolder;
     private static FolderManager folderManager;
+    private bool backToHardDrive = false;
 
+    #region static functions
     public static FolderManager instance
     {
         get
@@ -43,40 +45,56 @@ public class FolderManager : MonoBehaviour
             Children = new List<GameObject>();
         }
     }
+    #endregion
 
-    // Use this for initialization
     void Start()
     {
         Init();
         foreach (Transform child in transform)
         {
-            Debug.Log(child);
-            Children.Add(child.gameObject);
+            //Debug.Log(child);
+            if (child.gameObject.tag == "Folder")
+            {
+                Children.Add(child.gameObject);
+            }
         }
         
-        for ( int counter = 0; counter < Children.Count; counter++)
+        /*for ( int counter = 0; counter < Children.Count; counter++)
         {
             Debug.Log(Children[counter]);
-        }
+        }*/
         
     }
 
 
-
-    // Update is called once per frame
     void Update()
     {
-        /*for (int counter = 0; counter < Children.Count; counter++)
+        for (int counter = 0; counter < Children.Count; counter++)
         {
             certainFolder = Children[counter];
             Debug.Log(certainFolder);
-            if (certainFolder.transform.position.y > 0.91 || certainFolder.transform.position.y < 0.09)
+            if (certainFolder.transform.position.y > 0.91 || certainFolder.transform.position.y < 0.09 || certainFolder.transform.position.x > 0.3 || certainFolder.transform.position.x > -0.27)
             {
                 certainFolder.SetActive(false);
             } else
             {
                 certainFolder.SetActive(true);
             }
-        }*/
+
+            if (backToHardDrive)
+            {
+                certainFolder.transform.position = new Vector3((certainFolder.transform.position.x + 0.01f), certainFolder.transform.position.y, certainFolder.transform.position.z);
+            }
+        }
     }
+
+    public void goToHardDrive()
+    {
+        for (int counter = 0; counter < Children.Count; counter++)
+        {
+            if (Children[counter].tag == "Folder")
+            {
+                
+            }
+        }
 }
