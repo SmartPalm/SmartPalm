@@ -46,7 +46,7 @@ public class LookAtCamera : MonoBehaviour {
             if (yRot > lateYAddOffset || yRot < lateYSubOffset)
             {
                 transform.eulerAngles = newRot;
-                Debug.Log("Updated");
+                //Debug.Log("Updated");
             }
             
         }

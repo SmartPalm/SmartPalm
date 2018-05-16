@@ -6,9 +6,11 @@ public class FolderManager : MonoBehaviour
 {
     [HideInInspector]
     public static List<GameObject> Children;
+    public static GameObject hDDIcon;
     private GameObject certainFolder;
     private static FolderManager folderManager;
     private bool backToHardDrive = false;
+    private bool forwardToFolder = false;
 
     #region static functions
     public static FolderManager instance
@@ -58,7 +60,9 @@ public class FolderManager : MonoBehaviour
                 Children.Add(child.gameObject);
             }
         }
-        
+
+        hDDIcon = GameObject.Find("hdd");
+
         /*for ( int counter = 0; counter < Children.Count; counter++)
         {
             Debug.Log(Children[counter]);
@@ -69,11 +73,32 @@ public class FolderManager : MonoBehaviour
 
     void Update()
     {
+        if (hDDIcon.transform.localPosition.x > 0.3f || hDDIcon.transform.localPosition.x < -0.27f)
+        {
+            hDDIcon.SetActive(false);
+        }
+        else
+        {
+            hDDIcon.SetActive(true);
+        }
+
+
+        if (hDDIcon.transform.localPosition.x >= 0f && backToHardDrive)
+        {
+            backToHardDrive = false;
+            //Debug.Log("Changed");
+        }
+        if (hDDIcon.transform.localPosition.x <= -0.3f && forwardToFolder)
+        {
+            forwardToFolder = false;
+        }
+        moveToPosition(hDDIcon);
+
         for (int counter = 0; counter < Children.Count; counter++)
         {
             certainFolder = Children[counter];
-            Debug.Log(certainFolder);
-            if (certainFolder.transform.position.y > 0.91 || certainFolder.transform.position.y < 0.09 || certainFolder.transform.position.x > 0.3 || certainFolder.transform.position.x > -0.27)
+            //Debug.Log(certainFolder);
+            if (certainFolder.transform.localPosition.y > 0.91f || certainFolder.transform.localPosition.y < 0.09f || certainFolder.transform.localPosition.x > 0.3f || certainFolder.transform.localPosition.x < -0.27f)
             {
                 certainFolder.SetActive(false);
             } else
@@ -81,20 +106,53 @@ public class FolderManager : MonoBehaviour
                 certainFolder.SetActive(true);
             }
 
-            if (backToHardDrive)
+            if (certainFolder.transform.localPosition.x >= 0.3f && backToHardDrive)
             {
-                certainFolder.transform.position = new Vector3((certainFolder.transform.position.x + 0.01f), certainFolder.transform.position.y, certainFolder.transform.position.z);
+                backToHardDrive = false;
+                //Debug.Log("Changed by folder with " + certainFolder + " because its position was " + certainFolder.transform.localPosition.x);
             }
+            if (certainFolder.transform.localPosition.x <= 0f && forwardToFolder)
+            {
+                forwardToFolder = false;
+            }
+
+            moveToPosition(certainFolder);
         }
+
+        if (Input.GetKeyDown("m"))
+        {
+            goToHardDrive(); 
+        }
+
+        if (Input.GetKeyDown("n"))
+        {
+            Debug.Log("Called");
+            goToFolder();
+        }
+
+    }
+
+    private void moveToPosition (GameObject movingObj)
+    {
+        if (backToHardDrive)
+        {
+            //Debug.Log("Called for " + movingObj);
+            movingObj.transform.localPosition = new Vector3((movingObj.transform.localPosition.x + 0.01f), movingObj.transform.localPosition.y, movingObj.transform.localPosition.z);
+        } else if (forwardToFolder)
+        {
+            //Debug.Log("Called to move forward " + movingObj);
+            movingObj.transform.localPosition = new Vector3((movingObj.transform.localPosition.x - 0.01f), movingObj.transform.localPosition.y, movingObj.transform.localPosition.z);
+        }
+        
     }
 
     public void goToHardDrive()
     {
-        for (int counter = 0; counter < Children.Count; counter++)
-        {
-            if (Children[counter].tag == "Folder")
-            {
-                
-            }
-        }
+        backToHardDrive = true;
+    }
+
+    public void goToFolder()
+    {
+        forwardToFolder = true;
+    }
 }
