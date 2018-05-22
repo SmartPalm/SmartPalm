@@ -10,11 +10,12 @@ public class UI_Controller : MonoBehaviour {
     public static GameObject hologram;
     [HideInInspector]
     public static GameObject options;
+    
     private TextMesh hologramText;
     private bool optionsActive;
     private bool colorStatus = true;    // true = white, false = black
 
-	void Start () {
+    void Start () {
         options = GameObject.Find("OptionsMenu");
         hologram = GameObject.Find("holotext");
         hologramText = hologram.GetComponent<TextMesh>();
@@ -24,8 +25,8 @@ public class UI_Controller : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+
+    }
 
     public void OnChangeDisplay()
     {

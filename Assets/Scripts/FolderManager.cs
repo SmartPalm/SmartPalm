@@ -7,10 +7,16 @@ public class FolderManager : MonoBehaviour
     [HideInInspector]
     public static List<GameObject> Children;
     public static GameObject hDDIcon;
+
+    public bool widerScroll = false;
     private GameObject certainFolder;
     private static FolderManager folderManager;
     private bool backToHardDrive = false;
     private bool forwardToFolder = false;
+    private float borderLeft = -0.27f;
+    private float borderRight = 0.3f;
+    private float borderAbove = 0.91f;
+    private float borderBelow = 0.09f;
 
     #region static functions
     public static FolderManager instance
@@ -72,8 +78,22 @@ public class FolderManager : MonoBehaviour
 
 
     void Update()
-    {
-        if (hDDIcon.transform.localPosition.x > 0.3f || hDDIcon.transform.localPosition.x < -0.27f)
+    {   
+        if(widerScroll)
+        {
+            borderLeft = -0.7f;
+            borderRight = 0.7f;
+            borderAbove = 3f;
+            borderBelow = -3f;
+        } else
+        {
+            borderLeft = -0.27f;
+            borderRight = 0.3f;
+            borderAbove = 0.91f;
+            borderBelow = 0.09f;
+        }
+
+        if (hDDIcon.transform.localPosition.x > borderRight || hDDIcon.transform.localPosition.x < borderLeft)
         {
             hDDIcon.SetActive(false);
         }
@@ -81,12 +101,13 @@ public class FolderManager : MonoBehaviour
         {
             hDDIcon.SetActive(true);
         }
+        
 
 
         if (hDDIcon.transform.localPosition.x >= 0f && backToHardDrive)
         {
             backToHardDrive = false;
-            //Debug.Log("Changed");
+            Debug.Log("Changed by hdd");
         }
         if (hDDIcon.transform.localPosition.x <= -0.3f && forwardToFolder)
         {
@@ -98,13 +119,16 @@ public class FolderManager : MonoBehaviour
         {
             certainFolder = Children[counter];
             //Debug.Log(certainFolder);
-            if (certainFolder.transform.localPosition.y > 0.91f || certainFolder.transform.localPosition.y < 0.09f || certainFolder.transform.localPosition.x > 0.3f || certainFolder.transform.localPosition.x < -0.27f)
+            if (certainFolder.transform.localPosition.y > borderAbove || certainFolder.transform.localPosition.y < borderBelow || certainFolder.transform.localPosition.x > borderRight|| certainFolder.transform.localPosition.x < borderLeft)
             {
+                Debug.Log("Reseted by folders");
                 certainFolder.SetActive(false);
-            } else
+            }
+            else
             {
                 certainFolder.SetActive(true);
             }
+            
 
             if (certainFolder.transform.localPosition.x >= 0.3f && backToHardDrive)
             {
@@ -126,7 +150,7 @@ public class FolderManager : MonoBehaviour
 
         if (Input.GetKeyDown("n"))
         {
-            Debug.Log("Called");
+            //Debug.Log("Called");
             goToFolder();
         }
 
