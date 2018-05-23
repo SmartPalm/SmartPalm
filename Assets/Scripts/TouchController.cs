@@ -56,7 +56,7 @@ public class TouchController : MonoBehaviour {
 
 
         //Subscribe to events using the EventManager:
-        //EventManager.StartListening("scrollUp", scrollUp);
+        EventManager.StartListening(EVENT_SCROLL_HORIZONTAL, scrollUp);
     }
 
     // Update is called once per frame
@@ -76,12 +76,11 @@ public class TouchController : MonoBehaviour {
         }
     }
 
-    /*void scrollUp(float parameter)
+    void scrollUp(float parameter)
     {
-        direction.text = "Scroll up";
-        position3.text = "Wert: " + parameter;
-
-    }*/
+        //GameObject.Find("Debug").GetComponent<Text>().text = "Scroll Horizontal";
+        //GameObject.Find("DataManager").GetComponent<DataManager>().onScrollHorizontal(parameter);
+    }
 
     // 3 Finger touch gestures
     void touchWith3Finger()

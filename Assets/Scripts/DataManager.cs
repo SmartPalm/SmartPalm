@@ -45,12 +45,13 @@ public class DataManager : MonoBehaviour {
     }
 
 
-    void onScrollHorizontal( float changed)
+    public void onScrollHorizontal( float changed)
     {
-        if(canHaveAction)
+        GameObject.Find("Debug").GetComponent<Text>().text = "Scroll Horizontal";
+        if (canHaveAction)
         {
             currentDisplayedObject.transform.Rotate(0, changed * 2, 0);
-            GameObject.Find("Debug").GetComponent<Text>().text = "Scroll Horizontal";
+            
         }
     }
 
