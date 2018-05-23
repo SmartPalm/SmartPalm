@@ -95,10 +95,6 @@ public class AnimationControllerScript : MonoBehaviour {
 
     public void setFocusAnimation(string newAni)
     {
-        if (focusAnimation != null)
-        {
-            playFocusAnimationReversed();
-        }
         if (PlayableDic[newAni] != null)
         {
             focusAnimation = PlayableDic[newAni];
@@ -115,10 +111,10 @@ public class AnimationControllerScript : MonoBehaviour {
 
     public void playFocusAnimationReversed()
     {
-        if (!focusIsPlaying && focusWasPlayed)
+        if (!focusIsPlaying)
         {
             playFocusReverse = true;
             reverse(focusAnimation);
-        }    
+        }
     }
 }

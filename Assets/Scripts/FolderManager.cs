@@ -175,13 +175,13 @@ public class FolderManager : MonoBehaviour
         #region TastaturEingabeHilfe
         if (Input.GetKeyDown("m"))
         {
-            goToSelection();
+            makeSelection();
         }
 
         if (Input.GetKeyDown("n"))
         {
             //Debug.Log("Called");
-            goToMenu();
+            backToMenu();
         }
 
         if (Input.GetKeyDown("t"))
@@ -262,13 +262,13 @@ public class FolderManager : MonoBehaviour
     }
 
     // Changes the forwardToSelection bool into true
-    public void goToSelection()
+    public void makeSelection()
     {
         reverseAnimation("menu");
     }
 
     // Changes the backToMenu bool into true
-    public void goToMenu()
+    public void backToMenu()
     {
         callAnimation("menu");
     }
