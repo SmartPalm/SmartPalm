@@ -13,8 +13,8 @@ public class DataManager : MonoBehaviour {
         EventManager.StartListening(TouchController.EVENT_SCROLL_HORIZONTAL, onScrollHorizontal);
 
         EventManager.StartListening(TouchController.EVENT_SCROLL_VERTICAL, onScrollVertical);
-
-        canHaveAction = false;
+        currentDisplayedObject = GameObject.Find("BubbleExplorer");
+        canHaveAction = true;
     }
 	
 	// Update is called once per frame
@@ -42,6 +42,7 @@ public class DataManager : MonoBehaviour {
     public void setGameObject(string objectName)
     {
         currentDisplayedObject = GameObject.Find(objectName);
+        Debug.Log("GameObject selected: " + objectName);
     }
 
     public void startAction()
