@@ -6,17 +6,26 @@ public class FolderManager : MonoBehaviour
 {
     [HideInInspector]
     public static List<GameObject> Children;
+    [HideInInspector]
+    public static GameObject chosenFile;
     public static GameObject hDDIcon;
-
+    [Range (0f, 1.0f)]
+    public float chosenOffset;
     public bool widerScroll = false;
     private GameObject certainFolder;
     private static FolderManager folderManager;
+    private Dictionary<GameObject, float> DistanceDic = new Dictionary<GameObject, float>();
+    private GameObject best;
+    private Material standard;
+    private Material chosen;
     private bool backToHardDrive = false;
     private bool forwardToFolder = false;
+    private bool printFolder = false;
     private float borderLeft = -0.27f;
     private float borderRight = 0.3f;
     private float borderAbove = 0.91f;
     private float borderBelow = 0.09f;
+    //private float directionSpeed;
 
     #region static functions
     public static FolderManager instance
@@ -64,16 +73,19 @@ public class FolderManager : MonoBehaviour
             if (child.gameObject.tag == "Folder")
             {
                 Children.Add(child.gameObject);
+                saveComparedPositionToCamera(child.gameObject);
             }
         }
 
+        best = Children[0];
         hDDIcon = GameObject.Find("hdd");
-
+        standard = (Material)Resources.Load("Glassy", typeof(Material));
+        chosen = (Material)Resources.Load("Chosen", typeof(Material));
         /*for ( int counter = 0; counter < Children.Count; counter++)
         {
             Debug.Log(Children[counter]);
         }*/
-        
+
     }
 
 
@@ -118,10 +130,14 @@ public class FolderManager : MonoBehaviour
         for (int counter = 0; counter < Children.Count; counter++)
         {
             certainFolder = Children[counter];
+            if(printFolder)
+            {
+                Debug.Log(certainFolder.transform.position.z);
+            }
             //Debug.Log(certainFolder);
             if (certainFolder.transform.localPosition.y > borderAbove || certainFolder.transform.localPosition.y < borderBelow || certainFolder.transform.localPosition.x > borderRight|| certainFolder.transform.localPosition.x < borderLeft)
             {
-                Debug.Log("Reseted by folders");
+                
                 certainFolder.SetActive(false);
             }
             else
@@ -132,6 +148,7 @@ public class FolderManager : MonoBehaviour
 
             if (certainFolder.transform.localPosition.x >= 0.3f && backToHardDrive)
             {
+                Debug.Log("Reseted by folders");
                 backToHardDrive = false;
                 //Debug.Log("Changed by folder with " + certainFolder + " because its position was " + certainFolder.transform.localPosition.x);
             }
@@ -141,8 +158,19 @@ public class FolderManager : MonoBehaviour
             }
 
             moveToPosition(certainFolder);
+
+            if (certainFolder.transform.position.z < transform.position.z - chosenOffset)
+            {
+                certainFolder.GetComponent<Renderer>().material = chosen;
+            } else
+            {
+                certainFolder.GetComponent<Renderer>().material = standard;
+            }
+            changeComparedPositionToCamera(certainFolder);
         }
 
+        comparePositionsComparedToCamera();
+        #region TastaturEingabeHilfe
         if (Input.GetKeyDown("m"))
         {
             goToHardDrive(); 
@@ -153,6 +181,12 @@ public class FolderManager : MonoBehaviour
             //Debug.Log("Called");
             goToFolder();
         }
+
+        if (Input.GetKeyDown("t"))
+        {
+            printFolder = !printFolder;
+        }
+        #endregion
 
     }
 
@@ -170,13 +204,58 @@ public class FolderManager : MonoBehaviour
         
     }
 
+    // Fills the dictionary with files
+    private void saveComparedPositionToCamera(GameObject file) 
+    {
+        Debug.Log("We use " + file + " and the position of this " + GameObject.Find("ARCamera").transform.position.z);
+        DistanceDic.Add(file, GameObject.Find("ARCamera").transform.position.z + file.transform.position.z);
+    }
+
+    // Updates the position of every file every update
+    private void changeComparedPositionToCamera(GameObject file)
+    {
+        DistanceDic[file] = GameObject.Find("ARCamera").transform.position.z + file.transform.position.z;
+    }
+
+    // Compares every position and colors the nearest to the camerea blue
+    private void comparePositionsComparedToCamera()
+    {
+        foreach (GameObject key in DistanceDic.Keys)
+        {
+            key.GetComponent<Renderer>().material = standard;
+            if(DistanceDic[best] > DistanceDic[key] && GameObject.Find("ARCamera").transform.position.z < -10)
+            {
+                best = key;
+            } else if(DistanceDic[best] < DistanceDic[key] && GameObject.Find("ARCamera").transform.position.z > -10)
+            {
+                best = key;
+            }
+        }
+
+        best.GetComponent<Renderer>().material = chosen;
+    }
+
+    // Changes the backtohdd bool into true
     public void goToHardDrive()
     {
         backToHardDrive = true;
     }
 
+    // Changes the forwardtofolder bool into true
     public void goToFolder()
     {
         forwardToFolder = true;
+    }
+
+    // Changes the forwardToSelection bool into true
+    public void goToSelection()
+    {
+
+    }
+
+    // Changes the backToMenu bool into true
+    public void goToMenu()
+    {
+
     }
 }
