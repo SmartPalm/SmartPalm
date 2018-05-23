@@ -34,3 +34,7 @@ sysinfo.txt
 *.unitypackage
 
 Assets/Plugins\.meta
+
+*.meta~Updated upstream
+
+*.meta~Stashed changes
