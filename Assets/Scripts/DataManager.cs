@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DataManager : MonoBehaviour {
 
@@ -14,7 +15,13 @@ public class DataManager : MonoBehaviour {
 
         EventManager.StartListening(TouchController.EVENT_SCROLL_VERTICAL, onScrollVertical);
 
-        canHaveAction = false;
+        EventManager.StartListening(TouchController.EVENT_DOUBLE_TAP, onDoubleTap);
+
+        EventManager.StartListening(TouchController.EVENT_LAYER_UP, onLayerUp);
+
+        EventManager.StartListening(TouchController.EVENT_LAYER_DOWN, onLayerDown);
+        currentDisplayedObject = GameObject.Find("BubbleExplorer");
+        canHaveAction = true;
     }
 	
 	// Update is called once per frame
@@ -22,12 +29,29 @@ public class DataManager : MonoBehaviour {
 		
 	}
 
-
-    void onScrollHorizontal( float changed)
+    void onLayerUp( float changed )
     {
-        if(canHaveAction)
+       // GameObject.Find("BubbleExplorer").GetComponent<FolderManager>().backToMenu();
+    }
+
+    void onLayerDown( float changed )
+    {
+
+    }
+
+    void onDoubleTap( float changed )
+    {
+        //GameObject.Find("BubbleExplorer").GetComponent<FolderManager>().makeSelection();
+    }
+
+
+    public void onScrollHorizontal( float changed)
+    {
+        GameObject.Find("Debug").GetComponent<Text>().text = "Scroll Horizontal";
+        if (canHaveAction)
         {
             currentDisplayedObject.transform.Rotate(0, changed * 2, 0);
+            
         }
     }
 

@@ -19,6 +19,9 @@ public class TouchController : MonoBehaviour {
     public static string EVENT_SCROLL_VERTICAL = "scrollVertical";
     public static string EVENT_SCROLL_HORIZONTAL = "scrollHorizontal";
 
+    public static string EVENT_LAYER_UP = "layerUp";
+    public static string EVENT_LAYER_DOWN = "layerDown";
+
     private static string ORIENTATION_LANDSCAPE = "orientationLandscape";
     private static string ORIENTATION_PORTRAIT = "orientationPortrait";
 
@@ -53,7 +56,7 @@ public class TouchController : MonoBehaviour {
 
 
         //Subscribe to events using the EventManager:
-        //EventManager.StartListening("scrollUp", scrollUp);
+        EventManager.StartListening(EVENT_SCROLL_HORIZONTAL, scrollUp);
     }
 
     // Update is called once per frame
@@ -73,12 +76,11 @@ public class TouchController : MonoBehaviour {
         }
     }
 
-    /*void scrollUp(float parameter)
+    void scrollUp(float parameter)
     {
-        direction.text = "Scroll up";
-        position3.text = "Wert: " + parameter;
-
-    }*/
+        //GameObject.Find("Debug").GetComponent<Text>().text = "Scroll Horizontal";
+        //GameObject.Find("DataManager").GetComponent<DataManager>().onScrollHorizontal(parameter);
+    }
 
     // 3 Finger touch gestures
     void touchWith3Finger()
@@ -371,13 +373,13 @@ public class TouchController : MonoBehaviour {
                 {
                     switchLayer = false;
                     //direction.text = "Eine Ebene nach unten";
-                    EventManager.TriggerEvent("layerDown", 0);
+                    EventManager.TriggerEvent(EVENT_LAYER_DOWN, 0);
                 }
                 else if ((startTouch1.x - touch1.position.x) < -X_SWIPE_DIFFERENCE && (startTouch2.x - touch2.position.x) < -X_SWIPE_DIFFERENCE)
                 {
                     switchLayer = false;
                     //direction.text = "Eine Ebene nach oben";
-                    EventManager.TriggerEvent("layerUp", 0);
+                    EventManager.TriggerEvent(EVENT_LAYER_UP, 0);
                 }
             }
 
