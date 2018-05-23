@@ -16,10 +16,8 @@ public class TouchController : MonoBehaviour {
 
     //listener events
     public static string EVENT_DOUBLE_TAP = "doubleTap";
-    public static string EVENT_SCROLL_UP = "scrollUp";
-    public static string EVENT_SCROLL_DOWN = "scrollDown";
-    public static string EVENT_SCROLL_RIGHT = "scrollRight";
-    public static string EVENT_SCROLL_LEFT = "scrollLeft";
+    public static string EVENT_SCROLL_VERTICAL = "scrollVertical";
+    public static string EVENT_SCROLL_HORIZONTAL = "scrollHorizontal";
 
     private static string ORIENTATION_LANDSCAPE = "orientationLandscape";
     private static string ORIENTATION_PORTRAIT = "orientationPortrait";
@@ -268,7 +266,7 @@ public class TouchController : MonoBehaviour {
                 if (touch1.deltaPosition.x < 15 && touch1.deltaPosition.x > -15)
                 {
                     //direction.text = "Scrollen nach oben";
-                    EventManager.TriggerEvent(EVENT_SCROLL_UP, touch1.deltaPosition.y);
+                    EventManager.TriggerEvent(EVENT_SCROLL_VERTICAL, touch1.deltaPosition.y);
                 }
             }
             else if ((touch1.position.y - startTouch1.y) < -Y_SWIPE_DIFFERENCE)
@@ -276,21 +274,21 @@ public class TouchController : MonoBehaviour {
                 if (touch1.deltaPosition.x < 15 && touch1.deltaPosition.x > -15)
                 {
                     //direction.text = "Scrollen nach unten";
-                    EventManager.TriggerEvent(EVENT_SCROLL_DOWN, touch1.deltaPosition.y);
+                    EventManager.TriggerEvent(EVENT_SCROLL_VERTICAL, touch1.deltaPosition.y);
                 }
             }
             else if((touch1.position.x - startTouch1.x) > X_SWIPE_DIFFERENCE_SMALL)
             {
                 if(touch1.deltaPosition.y < 15 && touch1.deltaPosition.y > -15)
                 {
-                    EventManager.TriggerEvent(EVENT_SCROLL_RIGHT, touch1.deltaPosition.x);
+                    EventManager.TriggerEvent(EVENT_SCROLL_HORIZONTAL, touch1.deltaPosition.x);
                 }
             }
             else if((touch1.position.x - startTouch1.x) < -X_SWIPE_DIFFERENCE_SMALL)
             {
                 if (touch1.deltaPosition.y < 15 && touch1.deltaPosition.y > -15)
                 {
-                    EventManager.TriggerEvent(EVENT_SCROLL_LEFT, touch1.deltaPosition.x);
+                    EventManager.TriggerEvent(EVENT_SCROLL_HORIZONTAL, touch1.deltaPosition.x);
                 }
             }
         }
