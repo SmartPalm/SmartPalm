@@ -264,13 +264,13 @@ public class FolderManager : MonoBehaviour
     // Changes the forwardToSelection bool into true
     public void makeSelection()
     {
-        reverseAnimation("menu");
+        callAnimation("menu");
     }
 
     // Changes the backToMenu bool into true
     public void backToMenu()
     {
-        callAnimation("menu");
+        reverseAnimation("menu");
     }
 
     public void moveToilet()

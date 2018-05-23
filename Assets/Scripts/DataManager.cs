@@ -31,7 +31,7 @@ public class DataManager : MonoBehaviour {
 
     void onLayerUp( float changed )
     {
-       // GameObject.Find("BubbleExplorer").GetComponent<FolderManager>().backToMenu();
+       GameObject.Find("BubbleExplorer").GetComponent<FolderManager>().backToMenu();
     }
 
     void onLayerDown( float changed )
@@ -41,25 +41,24 @@ public class DataManager : MonoBehaviour {
 
     void onDoubleTap( float changed )
     {
-        //GameObject.Find("BubbleExplorer").GetComponent<FolderManager>().makeSelection();
+       GameObject.Find("BubbleExplorer").GetComponent<FolderManager>().makeSelection();
     }
 
 
-    public void onScrollHorizontal( float changed)
+    private void onScrollHorizontal(float changed)
     {
-        GameObject.Find("Debug").GetComponent<Text>().text = "Scroll Horizontal";
+        //GameObject.Find("Debug").GetComponent<Text>().text = "Scroll Horizontal";
         if (canHaveAction)
         {
-            currentDisplayedObject.transform.Rotate(0, changed * 2, 0);
-            
+            currentDisplayedObject.transform.Rotate(0, changed, 0, Space.World);
         }
     }
 
-    void onScrollVertical( float changed )
+    private void onScrollVertical(float changed )
     {
         if(canHaveAction)
         {
-            currentDisplayedObject.transform.Rotate(changed * 2, 0, 0);
+            currentDisplayedObject.transform.Rotate(changed, 0, 0, Space.World);
         }
     }
 
