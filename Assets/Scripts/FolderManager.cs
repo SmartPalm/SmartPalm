@@ -13,6 +13,7 @@ public class FolderManager : MonoBehaviour
     public float chosenOffset;
     public bool widerScroll = false;
     private GameObject certainFolder;
+    private GameObject animationController;
     private static FolderManager folderManager;
     private Dictionary<GameObject, float> DistanceDic = new Dictionary<GameObject, float>();
     private GameObject best;
@@ -77,6 +78,7 @@ public class FolderManager : MonoBehaviour
             }
         }
 
+        animationController = GameObject.Find("AnimationController");
         best = Children[0];
         hDDIcon = GameObject.Find("hdd");
         standard = (Material)Resources.Load("Glassy", typeof(Material));
@@ -173,13 +175,13 @@ public class FolderManager : MonoBehaviour
         #region TastaturEingabeHilfe
         if (Input.GetKeyDown("m"))
         {
-            goToHardDrive(); 
+            moveToilet();
         }
 
         if (Input.GetKeyDown("n"))
         {
             //Debug.Log("Called");
-            goToFolder();
+            reverseAnimation();
         }
 
         if (Input.GetKeyDown("t"))
@@ -235,6 +237,17 @@ public class FolderManager : MonoBehaviour
         best.GetComponent<Renderer>().material = chosen;
     }
 
+    private void callAnimation(string ani)
+    {
+        animationController.GetComponent<AnimationControllerScript>().setFocusAnimation(ani);
+        animationController.GetComponent<AnimationControllerScript>().playFocusAnimation();
+    }
+
+    private void reverseAnimation()
+    {
+        animationController.GetComponent<AnimationControllerScript>().playFocusAnimationReversed();
+    }
+
     // Changes the backtohdd bool into true
     public void goToHardDrive()
     {
@@ -257,5 +270,10 @@ public class FolderManager : MonoBehaviour
     public void goToMenu()
     {
 
+    }
+
+    public void moveToilet()
+    {
+        callAnimation("toilet");
     }
 }
