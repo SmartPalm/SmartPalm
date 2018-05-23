@@ -8,9 +8,9 @@ public class AnimationControllerScript : MonoBehaviour {
     public Dictionary<string, PlayableDirector> PlayableDic = new Dictionary<string, PlayableDirector>();
 
     private PlayableDirector focusAnimation;
-    private bool playFocusReverse;
-    private bool focusIsPlaying;
-    private bool focusWasPlayed;
+    private bool playFocusReverse = false;
+    private bool focusIsPlaying = false;
+    private bool focusWasPlayed = false;
     private double rewindTimer;
 
 	// Use this for initialization
@@ -25,7 +25,7 @@ public class AnimationControllerScript : MonoBehaviour {
 
         if(playFocusReverse)
         {
-            reverse(focusAnimation);
+            reversing(focusAnimation);
         }
 
     }
@@ -33,6 +33,7 @@ public class AnimationControllerScript : MonoBehaviour {
     private void fillDictionary()
     {
         PlayableDic.Add("toilet", GameObject.Find("TestAnimationTarget").GetComponent<PlayableDirector>());
+        PlayableDic.Add("menu", GameObject.Find("BubbleExplorer").GetComponent<PlayableDirector>());
     }
 
     private void controlStateOfFocus()
@@ -58,15 +59,15 @@ public class AnimationControllerScript : MonoBehaviour {
 
             if (playFocusReverse)
             {
-                reverse(focusAnimation);
-                Debug.Log("Started Reversing");
+                reversing(focusAnimation);
+                //Debug.Log("Started Reversing");
             }
         }   
     }
 
     private void reverse(PlayableDirector ani)
     {
-        Debug.Log("called reverse function");
+        //Debug.Log("called reverse function");
         ani.Stop();
         ani.time = ani.playableAsset.duration - 0.01;
         ani.Evaluate();
@@ -74,8 +75,10 @@ public class AnimationControllerScript : MonoBehaviour {
 
     private void reversing(PlayableDirector t)
     {
-        Debug.Log("Revinding: " + t.name);
+        //Debug.Log("Revinding: " + t.name);
         rewindTimer = t.time - Time.deltaTime;
+        //Debug.Log(rewindTimer);
+
         if (rewindTimer < 0)
             rewindTimer = 0;
 
@@ -92,7 +95,11 @@ public class AnimationControllerScript : MonoBehaviour {
 
     public void setFocusAnimation(string newAni)
     {
-        if(PlayableDic[newAni] != null)
+        if (focusAnimation != null)
+        {
+            playFocusAnimationReversed();
+        }
+        if (PlayableDic[newAni] != null)
         {
             focusAnimation = PlayableDic[newAni];
         } else
@@ -108,7 +115,10 @@ public class AnimationControllerScript : MonoBehaviour {
 
     public void playFocusAnimationReversed()
     {
-        playFocusReverse = true;
-        reversing(focusAnimation);
+        if (!focusIsPlaying && focusWasPlayed)
+        {
+            playFocusReverse = true;
+            reverse(focusAnimation);
+        }    
     }
 }
