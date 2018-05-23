@@ -137,7 +137,7 @@ public class FolderManager : MonoBehaviour
                 Debug.Log(certainFolder.transform.position.z);
             }
             //Debug.Log(certainFolder);
-            if (certainFolder.transform.localPosition.y > borderAbove || certainFolder.transform.localPosition.y < borderBelow || certainFolder.transform.localPosition.x > borderRight|| certainFolder.transform.localPosition.x < borderLeft)
+            /*if (certainFolder.transform.localPosition.y > borderAbove || certainFolder.transform.localPosition.y < borderBelow || certainFolder.transform.localPosition.x > borderRight|| certainFolder.transform.localPosition.x < borderLeft)
             {
                 
                 certainFolder.SetActive(false);
@@ -157,7 +157,7 @@ public class FolderManager : MonoBehaviour
             if (certainFolder.transform.localPosition.x <= 0f && forwardToFolder)
             {
                 forwardToFolder = false;
-            }
+            }*/
 
             moveToPosition(certainFolder);
 
@@ -175,13 +175,13 @@ public class FolderManager : MonoBehaviour
         #region TastaturEingabeHilfe
         if (Input.GetKeyDown("m"))
         {
-            moveToilet();
+            goToSelection();
         }
 
         if (Input.GetKeyDown("n"))
         {
             //Debug.Log("Called");
-            reverseAnimation();
+            goToMenu();
         }
 
         if (Input.GetKeyDown("t"))
@@ -209,7 +209,7 @@ public class FolderManager : MonoBehaviour
     // Fills the dictionary with files
     private void saveComparedPositionToCamera(GameObject file) 
     {
-        Debug.Log("We use " + file + " and the position of this " + GameObject.Find("ARCamera").transform.position.z);
+        //Debug.Log("We use " + file + " and the position of this " + GameObject.Find("ARCamera").transform.position.z);
         DistanceDic.Add(file, GameObject.Find("ARCamera").transform.position.z + file.transform.position.z);
     }
 
@@ -243,8 +243,9 @@ public class FolderManager : MonoBehaviour
         animationController.GetComponent<AnimationControllerScript>().playFocusAnimation();
     }
 
-    private void reverseAnimation()
+    private void reverseAnimation(string ani)
     {
+        animationController.GetComponent<AnimationControllerScript>().setFocusAnimation(ani);
         animationController.GetComponent<AnimationControllerScript>().playFocusAnimationReversed();
     }
 
@@ -263,13 +264,13 @@ public class FolderManager : MonoBehaviour
     // Changes the forwardToSelection bool into true
     public void goToSelection()
     {
-
+        reverseAnimation("menu");
     }
 
     // Changes the backToMenu bool into true
     public void goToMenu()
     {
-
+        callAnimation("menu");
     }
 
     public void moveToilet()
