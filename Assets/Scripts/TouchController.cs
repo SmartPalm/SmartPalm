@@ -35,8 +35,8 @@ public class TouchController : MonoBehaviour {
         GameObject positionField = GameObject.Find("Position");
         position = positionField.GetComponent<Text>();*/
 
-        GameObject directionField = GameObject.Find("Direction");
-        direction = directionField.GetComponent<Text>();
+        //GameObject directionField = GameObject.Find("Direction");
+        //direction = directionField.GetComponent<Text>();
 
         /*GameObject eventField = GameObject.Find("Event");
         eventText = eventField.GetComponent<Text>();
@@ -44,8 +44,8 @@ public class TouchController : MonoBehaviour {
         GameObject orientationField = GameObject.Find("Orientation");
         orientation = orientationField.GetComponent<Text>();*/
 
-        GameObject position3Field = GameObject.Find("Position3");
-        position3 = position3Field.GetComponent<Text>();
+        //GameObject position3Field = GameObject.Find("Position3");
+        //position3 = position3Field.GetComponent<Text>();
 
         switchXOrientation = false;
         switchYOrientation = false;

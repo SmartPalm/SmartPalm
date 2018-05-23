@@ -16,8 +16,8 @@ public class RotateARObject : MonoBehaviour
     void Start()
     {
         //textField = GameObject.Find("TouchStatusText").GetComponent<Text>();
-        EventManager.StartListening(TouchController.EVENT_SCROLL_LEFT, onScrollHorizontal);
-        EventManager.StartListening(TouchController.EVENT_SCROLL_RIGHT, onScrollHorizontal);
+        //EventManager.StartListening(TouchController.EVENT_SCROLL_LEFT, onScrollHorizontal);
+        //EventManager.StartListening(TouchController.EVENT_SCROLL_RIGHT, onScrollHorizontal);
     }
 
     void onScrollHorizontal(float value) {
