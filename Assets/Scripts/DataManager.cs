@@ -39,9 +39,18 @@ public class DataManager : MonoBehaviour {
         }
     }
 
-    public void setGameObject(string objectName, bool canHaveAction)
+    public void setGameObject(string objectName)
     {
         currentDisplayedObject = GameObject.Find(objectName);
-        this.canHaveAction = canHaveAction;
+    }
+
+    public void startAction()
+    {
+        canHaveAction = true;
+    }
+
+    public void stopAction()
+    {
+        canHaveAction = false;
     }
 }
