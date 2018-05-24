@@ -10,6 +10,7 @@ public class UI_Controller : MonoBehaviour {
     public static GameObject hologram;
     [HideInInspector]
     public static GameObject options;
+    GameObject touchAreaObject;
     
     private TextMesh hologramText;
     private bool optionsActive;
@@ -21,6 +22,15 @@ public class UI_Controller : MonoBehaviour {
         hologramText = hologram.GetComponent<TextMesh>();
         hologramText.text = "Hologram is online";
         options.SetActive(false);
+
+        float halfScreen = (float) Screen.height / 2;
+
+        touchAreaObject = GameObject.Find("TouchArea");
+        touchAreaObject.GetComponent<Image>().rectTransform.localScale = new Vector3(Screen.width, halfScreen, 0);
+        Vector3 posTmp = touchAreaObject.transform.position;
+        posTmp.y -= Screen.height / 4;
+        touchAreaObject.transform.position = posTmp;
+        //touchAreaObject.transform.position = new Vector3(touchAreaObject.transform.position.x, -(Screen.height / 4), touchAreaObject.transform.position.z);
 	}
 	
 	// Update is called once per frame
