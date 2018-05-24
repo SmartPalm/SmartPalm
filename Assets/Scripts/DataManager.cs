@@ -20,7 +20,7 @@ public class DataManager : MonoBehaviour {
         EventManager.StartListening(TouchController.EVENT_LAYER_UP, onLayerUp);
 
         EventManager.StartListening(TouchController.EVENT_LAYER_DOWN, onLayerDown);
-        currentDisplayedObject = GameObject.Find("BubbleExplorer");
+        currentDisplayedObject = GameObject.Find("menu");
         canHaveAction = true;
     }
 	
@@ -31,7 +31,7 @@ public class DataManager : MonoBehaviour {
 
     void onLayerUp( float changed )
     {
-       GameObject.Find("BubbleExplorer").GetComponent<FolderManager>().backToMenu();
+       currentDisplayedObject.GetComponent<FolderManager>().backToMenu();
     }
 
     void onLayerDown( float changed )
@@ -41,7 +41,7 @@ public class DataManager : MonoBehaviour {
 
     void onDoubleTap( float changed )
     {
-       GameObject.Find("BubbleExplorer").GetComponent<FolderManager>().makeSelection();
+       currentDisplayedObject.GetComponent<FolderManager>().makeSelection();
     }
 
 
