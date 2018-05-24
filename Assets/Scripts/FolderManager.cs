@@ -8,10 +8,10 @@ public class FolderManager : MonoBehaviour
     public static List<GameObject> Children;
     [HideInInspector]
     public static GameObject chosenFile;
-    public static GameObject hDDIcon;
+    [HideInInspector]
+    public static string state;
     [Range (0f, 1.0f)]
     public float chosenOffset;
-    public bool widerScroll = false;
     private GameObject certainFolder;
     private GameObject animationController;
     private static FolderManager folderManager;
@@ -19,13 +19,7 @@ public class FolderManager : MonoBehaviour
     private GameObject best;
     private Material standard;
     private Material chosen;
-    private bool backToHardDrive = false;
-    private bool forwardToFolder = false;
     private bool printFolder = false;
-    private float borderLeft = -0.27f;
-    private float borderRight = 0.3f;
-    private float borderAbove = 0.91f;
-    private float borderBelow = 0.09f;
     //private float directionSpeed;
 
     #region static functions
@@ -80,7 +74,7 @@ public class FolderManager : MonoBehaviour
 
         animationController = GameObject.Find("AnimationController");
         best = Children[0];
-        hDDIcon = GameObject.Find("hdd");
+        state = "menu";
         standard = (Material)Resources.Load("Glassy", typeof(Material));
         chosen = (Material)Resources.Load("Chosen", typeof(Material));
         /*for ( int counter = 0; counter < Children.Count; counter++)
@@ -93,42 +87,6 @@ public class FolderManager : MonoBehaviour
 
     void Update()
     {   
-        if(widerScroll)
-        {
-            borderLeft = -0.7f;
-            borderRight = 0.7f;
-            borderAbove = 3f;
-            borderBelow = -3f;
-        } else
-        {
-            borderLeft = -0.27f;
-            borderRight = 0.3f;
-            borderAbove = 0.91f;
-            borderBelow = 0.09f;
-        }
-
-        if (hDDIcon.transform.localPosition.x > borderRight || hDDIcon.transform.localPosition.x < borderLeft)
-        {
-            hDDIcon.SetActive(false);
-        }
-        else
-        {
-            hDDIcon.SetActive(true);
-        }
-        
-
-
-        if (hDDIcon.transform.localPosition.x >= 0f && backToHardDrive)
-        {
-            backToHardDrive = false;
-            Debug.Log("Changed by hdd");
-        }
-        if (hDDIcon.transform.localPosition.x <= -0.3f && forwardToFolder)
-        {
-            forwardToFolder = false;
-        }
-        moveToPosition(hDDIcon);
-
         for (int counter = 0; counter < Children.Count; counter++)
         {
             certainFolder = Children[counter];
@@ -137,29 +95,6 @@ public class FolderManager : MonoBehaviour
                 Debug.Log(certainFolder.transform.position.z);
             }
             //Debug.Log(certainFolder);
-            /*if (certainFolder.transform.localPosition.y > borderAbove || certainFolder.transform.localPosition.y < borderBelow || certainFolder.transform.localPosition.x > borderRight|| certainFolder.transform.localPosition.x < borderLeft)
-            {
-                
-                certainFolder.SetActive(false);
-            }
-            else
-            {
-                certainFolder.SetActive(true);
-            }
-            
-
-            if (certainFolder.transform.localPosition.x >= 0.3f && backToHardDrive)
-            {
-                Debug.Log("Reseted by folders");
-                backToHardDrive = false;
-                //Debug.Log("Changed by folder with " + certainFolder + " because its position was " + certainFolder.transform.localPosition.x);
-            }
-            if (certainFolder.transform.localPosition.x <= 0f && forwardToFolder)
-            {
-                forwardToFolder = false;
-            }*/
-
-            moveToPosition(certainFolder);
 
             if (certainFolder.transform.position.z < transform.position.z - chosenOffset)
             {
@@ -190,20 +125,6 @@ public class FolderManager : MonoBehaviour
         }
         #endregion
 
-    }
-
-    private void moveToPosition (GameObject movingObj)
-    {
-        if (backToHardDrive)
-        {
-            //Debug.Log("Called for " + movingObj);
-            movingObj.transform.localPosition = new Vector3((movingObj.transform.localPosition.x + 0.01f), movingObj.transform.localPosition.y, movingObj.transform.localPosition.z);
-        } else if (forwardToFolder)
-        {
-            //Debug.Log("Called to move forward " + movingObj);
-            movingObj.transform.localPosition = new Vector3((movingObj.transform.localPosition.x - 0.01f), movingObj.transform.localPosition.y, movingObj.transform.localPosition.z);
-        }
-        
     }
 
     // Fills the dictionary with files
@@ -249,28 +170,22 @@ public class FolderManager : MonoBehaviour
         animationController.GetComponent<AnimationControllerScript>().playFocusAnimationReversed();
     }
 
-    // Changes the backtohdd bool into true
-    public void goToHardDrive()
-    {
-        backToHardDrive = true;
-    }
-
-    // Changes the forwardtofolder bool into true
-    public void goToFolder()
-    {
-        forwardToFolder = true;
-    }
-
     // Changes the forwardToSelection bool into true
     public void makeSelection()
     {
         callAnimation("menu");
+        state = chosenFile.GetComponent<DirectoryPathScript>().directory;
+        reverseAnimation(state);
     }
 
     // Changes the backToMenu bool into true
     public void backToMenu()
     {
-        reverseAnimation("menu");
+        if (state != "menu")
+        {
+            reverseAnimation("menu");
+            state = "menu";
+        }
     }
 
     public void moveToilet()
