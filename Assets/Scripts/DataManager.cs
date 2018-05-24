@@ -50,7 +50,7 @@ public class DataManager : MonoBehaviour {
         //GameObject.Find("Debug").GetComponent<Text>().text = "Scroll Horizontal";
         if (canHaveAction)
         {
-            currentDisplayedObject.transform.Rotate(0, changed, 0, Space.World);
+            currentDisplayedObject.transform.Rotate(0, -changed, 0, Space.World);
         }
     }
 

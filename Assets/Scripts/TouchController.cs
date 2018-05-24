@@ -369,13 +369,13 @@ public class TouchController : MonoBehaviour {
             if (switchLayer == true)
             {
                 //counter.text = "Änderung: " + (startTouch1.x - touch1.position.x);
-                if ((startTouch1.x - touch1.position.x) > X_SWIPE_DIFFERENCE && (startTouch2.x - touch2.position.x) > X_SWIPE_DIFFERENCE)
+                if ((startTouch1.x - touch1.position.x) < -X_SWIPE_DIFFERENCE_SMALL && (startTouch2.x - touch2.position.x) < -X_SWIPE_DIFFERENCE_SMALL)
                 {
                     switchLayer = false;
                     //direction.text = "Eine Ebene nach unten";
                     EventManager.TriggerEvent(EVENT_LAYER_DOWN, 0);
                 }
-                else if ((startTouch1.x - touch1.position.x) < -X_SWIPE_DIFFERENCE && (startTouch2.x - touch2.position.x) < -X_SWIPE_DIFFERENCE)
+                else if ((startTouch1.x - touch1.position.x) > X_SWIPE_DIFFERENCE_SMALL && (startTouch2.x - touch2.position.x) > X_SWIPE_DIFFERENCE_SMALL)
                 {
                     switchLayer = false;
                     //direction.text = "Eine Ebene nach oben";
