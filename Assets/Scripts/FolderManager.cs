@@ -16,7 +16,6 @@ public class FolderManager : MonoBehaviour
     private GameObject animationController;
     private static FolderManager folderManager;
     private Dictionary<GameObject, float> DistanceDic = new Dictionary<GameObject, float>();
-    private GameObject best;
     private Material standard;
     private Material chosen;
     private bool printFolder = false;
@@ -73,7 +72,7 @@ public class FolderManager : MonoBehaviour
         }
 
         animationController = GameObject.Find("AnimationController");
-        best = Children[0];
+        chosenFile = Children[0];
         state = "menu";
         standard = (Material)Resources.Load("Glassy", typeof(Material));
         chosen = (Material)Resources.Load("Chosen", typeof(Material));
@@ -146,16 +145,16 @@ public class FolderManager : MonoBehaviour
         foreach (GameObject key in DistanceDic.Keys)
         {
             key.GetComponent<Renderer>().material = standard;
-            if(DistanceDic[best] > DistanceDic[key] && GameObject.Find("ARCamera").transform.position.z < -10)
+            if(DistanceDic[chosenFile] > DistanceDic[key] && GameObject.Find("ARCamera").transform.position.z < -10)
             {
-                best = key;
-            } else if(DistanceDic[best] < DistanceDic[key] && GameObject.Find("ARCamera").transform.position.z > -10)
+                chosenFile = key;
+            } else if(DistanceDic[chosenFile] < DistanceDic[key] && GameObject.Find("ARCamera").transform.position.z > -10)
             {
-                best = key;
+                chosenFile = key;
             }
         }
 
-        best.GetComponent<Renderer>().material = chosen;
+        chosenFile.GetComponent<Renderer>().material = chosen;
     }
 
     private void callAnimation(string ani)
@@ -174,6 +173,7 @@ public class FolderManager : MonoBehaviour
     public void makeSelection()
     {
         callAnimation("menu");
+        Debug.Log("Selected Folder: " + chosenFile);
         state = chosenFile.GetComponent<DirectoryPathScript>().directory;
         reverseAnimation(state);
     }
@@ -181,6 +181,7 @@ public class FolderManager : MonoBehaviour
     // Changes the backToMenu bool into true
     public void backToMenu()
     {
+        callAnimation(state);
         if (state != "menu")
         {
             reverseAnimation("menu");

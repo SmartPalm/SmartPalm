@@ -34,6 +34,8 @@ public class AnimationControllerScript : MonoBehaviour {
     {
         PlayableDic.Add("toilet", GameObject.Find("TestAnimationTarget").GetComponent<PlayableDirector>());
         PlayableDic.Add("menu", GameObject.Find("BubbleExplorer").GetComponent<PlayableDirector>());
+        PlayableDic.Add("3DModelFolder", GameObject.Find("3DModelFolder").GetComponent<PlayableDirector>());
+        PlayableDic.Add("Bluetooth", GameObject.Find("Bluetooth").GetComponent<PlayableDirector>());
     }
 
     private void controlStateOfFocus()
@@ -95,7 +97,7 @@ public class AnimationControllerScript : MonoBehaviour {
 
     public void setFocusAnimation(string newAni)
     {
-        if (PlayableDic[newAni] != null)
+        if (PlayableDic[newAni] != null && !focusIsPlaying)
         {
             focusAnimation = PlayableDic[newAni];
         } else
@@ -117,4 +119,5 @@ public class AnimationControllerScript : MonoBehaviour {
             reverse(focusAnimation);
         }
     }
+
 }
