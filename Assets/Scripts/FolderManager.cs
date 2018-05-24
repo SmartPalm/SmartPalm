@@ -172,18 +172,21 @@ public class FolderManager : MonoBehaviour
     // Changes the forwardToSelection bool into true
     public void makeSelection()
     {
-        callAnimation("menu");
-        Debug.Log("Selected Folder: " + chosenFile);
-        state = chosenFile.GetComponent<DirectoryPathScript>().directory;
-        reverseAnimation(state);
+        if (GameObject.Find(state).GetComponent<DirectoryPathScript>().isNewDirectory)
+        {
+            callAnimation(state);
+            Debug.Log("Selected Folder: " + chosenFile);
+            state = chosenFile.GetComponent<DirectoryPathScript>().directory;
+            reverseAnimation(state);
+        }
     }
 
     // Changes the backToMenu bool into true
     public void backToMenu()
     {
-        callAnimation(state);
         if (state != "menu")
         {
+            callAnimation(state);
             reverseAnimation("menu");
             state = "menu";
         }

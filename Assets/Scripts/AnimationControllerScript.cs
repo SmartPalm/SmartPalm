@@ -33,9 +33,10 @@ public class AnimationControllerScript : MonoBehaviour {
     private void fillDictionary()
     {
         PlayableDic.Add("toilet", GameObject.Find("TestAnimationTarget").GetComponent<PlayableDirector>());
-        PlayableDic.Add("menu", GameObject.Find("BubbleExplorer").GetComponent<PlayableDirector>());
+        PlayableDic.Add("menu", GameObject.Find("menu").GetComponent<PlayableDirector>());
         PlayableDic.Add("3DModelFolder", GameObject.Find("3DModelFolder").GetComponent<PlayableDirector>());
         PlayableDic.Add("Bluetooth", GameObject.Find("Bluetooth").GetComponent<PlayableDirector>());
+        PlayableDic.Add("armbones", GameObject.Find("armbones").GetComponent<PlayableDirector>());
     }
 
     private void controlStateOfFocus()
@@ -102,7 +103,7 @@ public class AnimationControllerScript : MonoBehaviour {
             focusAnimation = PlayableDic[newAni];
         } else
         {
-            Debug.Log("------ ANIMATION-ERROR: " + newAni + " does not exist as in the dictionary --------------");
+            Debug.Log("------ ANIMATION-ERROR: " + newAni + " does not exist in the dictionary --------------");
         }
     }
 
