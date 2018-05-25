@@ -23,8 +23,10 @@ public class UI_Controller : MonoBehaviour {
         hologramText.text = "Hologram is online";
         options.SetActive(false);
 
+        float halfScreen = (float) Screen.height / 2;
+
         touchAreaObject = GameObject.Find("TouchArea");
-        touchAreaObject.GetComponent<Image>().rectTransform.localScale = new Vector3(Screen.width, Screen.height / 2, 0);
+        touchAreaObject.GetComponent<Image>().rectTransform.localScale = new Vector3(Screen.width, halfScreen, 0);
         Vector3 posTmp = touchAreaObject.transform.position;
         posTmp.y -= Screen.height / 4;
         touchAreaObject.transform.position = posTmp;
