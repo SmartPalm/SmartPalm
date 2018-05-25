@@ -4,63 +4,27 @@ using UnityEngine;
 
 public class FolderManager : MonoBehaviour
 {
-    [HideInInspector]
-    public static List<GameObject> Children;
-    [HideInInspector]
-    public static GameObject chosenFile;
+    
+    
+    
     [HideInInspector]
     public static string state;
     [Range (0f, 1.0f)]
     public float chosenOffset;
+
+    private List<GameObject> Children = new List<GameObject>();
+    private GameObject chosenFile;
     private GameObject certainFolder;
     private GameObject animationController;
-    private static FolderManager folderManager;
     private Dictionary<GameObject, float> DistanceDic = new Dictionary<GameObject, float>();
     private Material standard;
     private Material chosen;
     private bool printFolder = false;
     //private float directionSpeed;
 
-    #region static functions
-    public static FolderManager instance
-    {
-        get
-        {
-            if (!folderManager)
-            {
-                folderManager = FindObjectOfType(typeof(FolderManager)) as FolderManager;
-
-                if (!folderManager)
-                {
-                    Debug.LogError("There needs to be one active FolderManager script on a GameObject in your scene.");
-                }
-                else
-                {
-                    folderManager.Init();
-                }
-            }
-
-            return folderManager;
-        }
-    }
-
-    void Init()
-    {
-        if (certainFolder == null)
-        {
-            certainFolder = new GameObject();
-        }
-
-        if (Children == null)
-        {
-            Children = new List<GameObject>();
-        }
-    }
-    #endregion
 
     void Start()
     {
-        Init();
         foreach (Transform child in transform)
         {
             //Debug.Log(child);
@@ -106,6 +70,7 @@ public class FolderManager : MonoBehaviour
         }
 
         comparePositionsComparedToCamera();
+
         #region TastaturEingabeHilfe
         if (Input.GetKeyDown("m"))
         {
@@ -123,7 +88,6 @@ public class FolderManager : MonoBehaviour
             printFolder = !printFolder;
         }
         #endregion
-
     }
 
     // Fills the dictionary with files

@@ -37,6 +37,7 @@ public class AnimationControllerScript : MonoBehaviour {
         PlayableDic.Add("3DModelFolder", GameObject.Find("3DModelFolder").GetComponent<PlayableDirector>());
         PlayableDic.Add("Bluetooth", GameObject.Find("Bluetooth").GetComponent<PlayableDirector>());
         PlayableDic.Add("armbones", GameObject.Find("armbones").GetComponent<PlayableDirector>());
+        PlayableDic.Add("DevFolder", GameObject.Find("DevFolder").GetComponent<PlayableDirector>());
     }
 
     private void controlStateOfFocus()
