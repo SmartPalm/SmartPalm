@@ -140,7 +140,7 @@ public class FolderManager : MonoBehaviour
         if (GameObject.Find(state).GetComponent<DirectoryPathScript>().isNewDirectory)
         {
             callAnimation(state);
-            Debug.Log("Selected Folder: " + chosenFile);
+            Debug.Log("Selected Folder: " + chosenFile + " and the new directotry is: " + chosenFile.GetComponent<DirectoryPathScript>().directory);
             state = chosenFile.GetComponent<DirectoryPathScript>().directory;
             reverseAnimation(state);
         }
