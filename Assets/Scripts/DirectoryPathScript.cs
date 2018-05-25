@@ -10,10 +10,6 @@ public class DirectoryPathScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		if(transform.GetChild(0) == null)
-        {
-            isNewDirectory = false;
-        }
 	}
 	
 	// Update is called once per frame

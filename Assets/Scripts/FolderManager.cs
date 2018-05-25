@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FolderManager : MonoBehaviour
 {
@@ -159,5 +160,17 @@ public class FolderManager : MonoBehaviour
     public void moveToilet()
     {
         callAnimation("toilet");
+    }
+
+    public void logState()
+    {
+        
+        GameObject.Find("Debug").GetComponent<Text>().text = state;
+    }
+
+    public void printState()
+    {
+        Debug.Log("The state is " + state + ", the chosenFile is at this time " + chosenFile + " and was brought to you by " + this);
+        GameObject.Find(state).GetComponent<FolderManager>().logState();
     }
 }

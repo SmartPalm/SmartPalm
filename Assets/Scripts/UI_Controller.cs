@@ -56,10 +56,12 @@ public class UI_Controller : MonoBehaviour {
         if (colorStatus)
         {
             hologramText.color = Color.black;
+            GameObject.Find("Debug").GetComponent<Text>().color = Color.white;
             colorStatus = false;
         } else
         {
             hologramText.color = Color.white;
+            GameObject.Find("Debug").GetComponent<Text>().color = Color.black;
             colorStatus = true;
         }
     }
