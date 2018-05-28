@@ -99,9 +99,13 @@ public class AnimationControllerScript : MonoBehaviour {
 
     public void setFocusAnimation(string newAni)
     {
-        if (PlayableDic[newAni] != null && !focusIsPlaying)
+        if (PlayableDic[newAni] != null)
         {
-            focusAnimation = PlayableDic[newAni];
+            if (!focusIsPlaying)
+            {
+                focusAnimation = PlayableDic[newAni];
+            }
+            
         } else
         {
             Debug.Log("------ ANIMATION-ERROR: " + newAni + " does not exist in the dictionary --------------");

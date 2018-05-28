@@ -20,6 +20,7 @@ public class FolderManager : MonoBehaviour
     private Dictionary<GameObject, float> DistanceDic = new Dictionary<GameObject, float>();
     private Material standard;
     private Material chosen;
+    private bool isOnObject;
     private bool printFolder = false;
     //private float directionSpeed;
 
@@ -41,6 +42,7 @@ public class FolderManager : MonoBehaviour
         state = "menu";
         standard = (Material)Resources.Load("Glassy", typeof(Material));
         chosen = (Material)Resources.Load("Chosen", typeof(Material));
+        isOnObject = false;
         /*for ( int counter = 0; counter < Children.Count; counter++)
         {
             Debug.Log(Children[counter]);
@@ -140,20 +142,26 @@ public class FolderManager : MonoBehaviour
         if (GameObject.Find(state).GetComponent<DirectoryPathScript>().isNewDirectory)
         {
             callAnimation(state);
-            Debug.Log("Selected Folder: " + chosenFile + " and the new directotry is: " + chosenFile.GetComponent<DirectoryPathScript>().directory);
+            
             state = chosenFile.GetComponent<DirectoryPathScript>().directory;
+            GameObject.Find("DataManager").GetComponent<DataManager>().setGameObject(state);
+
+            Debug.Log("Selected Folder: " + chosenFile + " and the new directotry is: " + chosenFile.GetComponent<DirectoryPathScript>().directory + " and the GameObject in Focus is: " + GameObject.Find("DataManager").GetComponent<DataManager>().currentDisplayedObject);
             reverseAnimation(state);
+        }
+        else if (!isOnObject)
+        {
         }
     }
 
     // Changes the backToMenu bool into true
     public void backToMenu()
     {
-        if (state != "menu")
+        if (state != this.name)
         {
             callAnimation(state);
-            reverseAnimation("menu");
-            state = "menu";
+            reverseAnimation(this.name);
+            state = this.name;
         }
     }
 

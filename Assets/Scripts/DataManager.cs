@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class DataManager : MonoBehaviour {
 
-    private GameObject currentDisplayedObject;
+    [HideInInspector]
+    public GameObject currentDisplayedObject;
+    private GameObject lastDisplayedObject;
     private bool canHaveAction;
 
 	// Use this for initialization
@@ -26,22 +28,31 @@ public class DataManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
 	}
 
     void onLayerUp( float changed )
     {
-       currentDisplayedObject.GetComponent<FolderManager>().backToMenu();
+        if (currentDisplayedObject.GetComponent<DirectoryPathScript>().isNewDirectory)
+        {
+            currentDisplayedObject.GetComponent<FolderManager>().backToMenu();
+        } else
+        {
+            lastDisplayedObject.GetComponent<FolderManager>().backToMenu();
+        }
     }
 
     void onLayerDown( float changed )
     {
-
+        
     }
 
     void onDoubleTap( float changed )
     {
-       currentDisplayedObject.GetComponent<FolderManager>().makeSelection();
+        if (currentDisplayedObject.GetComponent<DirectoryPathScript>().isNewDirectory)
+        {
+            currentDisplayedObject.GetComponent<FolderManager>().makeSelection();
+        }
+       
     }
 
 
@@ -64,6 +75,7 @@ public class DataManager : MonoBehaviour {
 
     public void setGameObject(string objectName)
     {
+        lastDisplayedObject = currentDisplayedObject;
         currentDisplayedObject = GameObject.Find(objectName);
     }
 
@@ -75,5 +87,30 @@ public class DataManager : MonoBehaviour {
     public void stopAction()
     {
         canHaveAction = false;
+    }
+
+    public void simulateDoubleTap()
+    {
+        if (currentDisplayedObject.GetComponent<DirectoryPathScript>().isNewDirectory)
+        {
+            currentDisplayedObject.GetComponent<FolderManager>().makeSelection();
+        }
+    }
+
+    public void simulateLayerUp()
+    {
+        if (currentDisplayedObject.GetComponent<DirectoryPathScript>().isNewDirectory)
+        {
+            currentDisplayedObject.GetComponent<FolderManager>().backToMenu();
+        }
+        else
+        {
+            lastDisplayedObject.GetComponent<FolderManager>().backToMenu();
+        }
+    }
+
+    public void simulateLayerDown()
+    {
+        currentDisplayedObject.GetComponent<FolderManager>().printState();
     }
 }
