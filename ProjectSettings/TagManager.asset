@@ -7,6 +7,8 @@ TagManager:
   - Folder
   - HDD
   - CanRot
+  - video
+  - videoPreview
   layers:
   - Default
   - TransparentFX
