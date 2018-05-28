@@ -111,6 +111,13 @@ public class DataManager : MonoBehaviour {
 
     public void simulateLayerDown()
     {
-        currentDisplayedObject.GetComponent<FolderManager>().printState();
+        if (currentDisplayedObject.GetComponent<DirectoryPathScript>().isNewDirectory)
+        {
+            currentDisplayedObject.GetComponent<FolderManager>().printState();
+        } else
+        {
+            lastDisplayedObject.GetComponent<FolderManager>().printState();
+        }
+        
     }
 }

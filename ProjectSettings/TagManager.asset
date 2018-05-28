@@ -7,6 +7,9 @@ TagManager:
   - Folder
   - HDD
   - CanRot
+  - video
+  - videoPreview
+  - bluetooth
   layers:
   - Default
   - TransparentFX

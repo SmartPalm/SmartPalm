@@ -30,7 +30,7 @@ public class FolderManager : MonoBehaviour
         foreach (Transform child in transform)
         {
             //Debug.Log(child);
-            if (child.gameObject.tag == "Folder")
+            if (child.gameObject.tag == "Folder" || child.gameObject.tag == "video" || child.gameObject.tag == "bluetooth")
             {
                 Children.Add(child.gameObject);
                 saveComparedPositionToCamera(child.gameObject);
@@ -139,7 +139,7 @@ public class FolderManager : MonoBehaviour
     // Changes the forwardToSelection bool into true
     public void makeSelection()
     {
-        if (GameObject.Find(state).GetComponent<DirectoryPathScript>().isNewDirectory)
+        if (GameObject.Find(state).GetComponent<DirectoryPathScript>().isNewDirectory && chosenFile.tag == "Folder")
         {
             callAnimation(state);
             
@@ -149,19 +149,31 @@ public class FolderManager : MonoBehaviour
             Debug.Log("Selected Folder: " + chosenFile + " and the new directotry is: " + chosenFile.GetComponent<DirectoryPathScript>().directory + " and the GameObject in Focus is: " + GameObject.Find("DataManager").GetComponent<DataManager>().currentDisplayedObject);
             reverseAnimation(state);
         }
-        else if (!isOnObject)
+        else if (chosenFile.tag == "video") 
         {
+            GameObject.Find("VideoManager").GetComponent<VideoManager>().callMethodForGameObject(chosenFile);
+        }
+        else if (chosenFile.tag == "bluetooth")
+        {
+            GameObject.Find("Bluetooth").GetComponent<NativeAndroidBluetooth>().callMethodForGameObject(chosenFile);
         }
     }
 
     // Changes the backToMenu bool into true
     public void backToMenu()
     {
-        if (state != this.name)
+        if (state != name)
         {
             callAnimation(state);
-            reverseAnimation(this.name);
-            state = this.name;
+            reverseAnimation(name);
+            state = name;
+            GameObject.Find("DataManager").GetComponent<DataManager>().setGameObject(state);
+        } else if(state == name && state != "menu")
+        {
+            callAnimation(state);
+            reverseAnimation("menu");
+            state = "menu";
+            GameObject.Find("DataManager").GetComponent<DataManager>().setGameObject(state);
         }
     }
 
@@ -179,6 +191,6 @@ public class FolderManager : MonoBehaviour
     public void printState()
     {
         Debug.Log("The state is " + state + ", the chosenFile is at this time " + chosenFile + " and was brought to you by " + this);
-        GameObject.Find(state).GetComponent<FolderManager>().logState();
+        logState();
     }
 }
