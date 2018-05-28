@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class NativeAndroid : MonoBehaviour
+public class NativeAndroidBluetooth : MonoBehaviour
 {
 		private const string BLUETOOTH_CLASS = "com.smartpalm.nativebluetoothplugin.BluetoothService";
 
@@ -12,6 +12,9 @@ public class NativeAndroid : MonoBehaviour
 
 		[SerializeField]
     private Text _deviceList;
+
+		[SerializeField]
+    private Text _orientationLabel;
 
 		private List<string> namesOfNearbyDevices = new List<string>();
 		private string jsonOfNearbyDevices;
@@ -26,6 +29,13 @@ public class NativeAndroid : MonoBehaviour
             updateDeviceList();
           }
 			}
+
+			if (Input.deviceOrientation == DeviceOrientation.LandscapeLeft || Input.deviceOrientation == DeviceOrientation.LandscapeRight) {
+         _orientationLabel.text = "Landscape";
+     	}
+     	else {
+				_orientationLabel.text = "Not landscape";
+     	}
 		}
 
 		void updateDeviceList() {
