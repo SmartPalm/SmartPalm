@@ -26,7 +26,7 @@ public class LookAtCamera : MonoBehaviour {
     private float lateZSubOffset;
 
     // Use this for initialization
-    void Start () {
+    void Awake() {
         target = GameObject.Find("ARCamera").transform;
 
         lateYAddOffset = target.eulerAngles.y + additionOffset;
@@ -39,11 +39,11 @@ public class LookAtCamera : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-        if (gameObject.tag == "Folder")
+        Debug.Log("Update happend in " + this);
+        if (gameObject.tag == "Folder" || gameObject.tag == "video" || gameObject.tag == "bluetooth")
         {
             xRot = target.eulerAngles.x - 120f;
-            yRot = target.eulerAngles.y + 180f;
+            yRot = target.eulerAngles.y;
             zRot = target.eulerAngles.z;
         } else
         {
@@ -51,8 +51,7 @@ public class LookAtCamera : MonoBehaviour {
             yRot = target.eulerAngles.y;
             zRot = target.eulerAngles.z;
         }
-        
-        
+          
         if (!useAllDirections)
         {
             if (gameObject.tag == "Folder")
@@ -67,9 +66,6 @@ public class LookAtCamera : MonoBehaviour {
         {
             newRot = new Vector3(xRot, yRot, zRot);
         }
-                
-        
-        
 
         if (lookAtTargetStrictly)
         {
@@ -92,9 +88,7 @@ public class LookAtCamera : MonoBehaviour {
                     transform.eulerAngles = newRot;
                     //Debug.Log("Updated");
                 }
-            }
-            
-            
+            }     
         }
 
         lateYAddOffset = yRot + additionOffset;
