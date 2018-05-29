@@ -79,16 +79,6 @@ public class DataManager : MonoBehaviour {
         currentDisplayedObject = GameObject.Find(objectName);
     }
 
-    public void startAction()
-    {
-        canHaveAction = true;
-    }
-
-    public void stopAction()
-    {
-        canHaveAction = false;
-    }
-
     public void simulateDoubleTap()
     {
         if (currentDisplayedObject.GetComponent<DirectoryPathScript>().isNewDirectory)

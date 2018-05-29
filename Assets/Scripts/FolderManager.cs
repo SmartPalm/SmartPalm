@@ -12,8 +12,6 @@ public class FolderManager : MonoBehaviour
     public static string state;
     [Range (0f, 1.0f)]
     public float chosenOffset;
-    [HideInInspector]
-    public static bool systempause = false;
 
     private List<GameObject> Children = new List<GameObject>();
     private GameObject chosenFile;
@@ -24,7 +22,6 @@ public class FolderManager : MonoBehaviour
     private Material chosen;
     private bool isOnObject;
     private bool printFolder = false;
-    private int systempauseCounter;
     //private float directionSpeed;
 
 
@@ -40,7 +37,6 @@ public class FolderManager : MonoBehaviour
             }
         }
 
-        systempauseCounter = 0;
         animationController = GameObject.Find("AnimationController");
         chosenFile = Children[0];
         state = "menu";
@@ -57,18 +53,7 @@ public class FolderManager : MonoBehaviour
 
     void Update()
     {
-        if (systempause)
-        {
-            systempauseCounter++;
-            if (systempauseCounter == 12)
-            {
-                systempause = false;
-                systempauseCounter = 0;
-            }
-        }
-    
-
-            for (int counter = 0; counter < Children.Count; counter++)
+        for (int counter = 0; counter < Children.Count; counter++)
         {
             certainFolder = Children[counter];
             if(printFolder)
@@ -156,57 +141,48 @@ public class FolderManager : MonoBehaviour
     // Changes the forwardToSelection bool into true
     public void makeSelection()
     {
-        if (!systempause)
+
+        if (GameObject.Find(state).GetComponent<DirectoryPathScript>().isNewDirectory && chosenFile.tag == "Folder")
         {
-            if (GameObject.Find(state).GetComponent<DirectoryPathScript>().isNewDirectory && chosenFile.tag == "Folder")
-            {
-                callAnimation(state);
+            callAnimation(state);
 
-                state = chosenFile.GetComponent<DirectoryPathScript>().directory;
-                printState();
-                GameObject.Find("DataManager").GetComponent<DataManager>().setGameObject(state);
+            state = chosenFile.GetComponent<DirectoryPathScript>().directory;
+            printState();
+            GameObject.Find("DataManager").GetComponent<DataManager>().setGameObject(state);
 
-                Debug.Log("Selected Folder: " + chosenFile + " and the new directotry is: " + chosenFile.GetComponent<DirectoryPathScript>().directory + " and the GameObject in Focus is: " + GameObject.Find("DataManager").GetComponent<DataManager>().currentDisplayedObject);
-                reverseAnimation(state);
-            }
-            else if (chosenFile.tag == "video")
-            {
-                printFixedState(true);
-                GameObject.Find("VideoManager").GetComponent<VideoManager>().callMethodForGameObject(chosenFile);
-            }
-            else if (chosenFile.tag == "bluetooth")
-            {
-                printFixedState(false);
-                GameObject.Find("Bluetooth").GetComponent<NativeAndroidBluetooth>().callMethodForGameObject(chosenFile);
-            }
-            systempause = true;
-            systempauseCounter = 0;
-        } 
+            Debug.Log("Selected Folder: " + chosenFile + " and the new directotry is: " + chosenFile.GetComponent<DirectoryPathScript>().directory + " and the GameObject in Focus is: " + GameObject.Find("DataManager").GetComponent<DataManager>().currentDisplayedObject);
+            reverseAnimation(state);
+        }
+        else if (chosenFile.tag == "video")
+        {
+            printFixedState(true);
+            GameObject.Find("VideoManager").GetComponent<VideoManager>().callMethodForGameObject(chosenFile);
+        }
+        else if (chosenFile.tag == "bluetooth")
+        {
+            printFixedState(false);
+            GameObject.Find("Bluetooth").GetComponent<NativeAndroidBluetooth>().callMethodForGameObject(chosenFile);
+        }
     }
 
     // Changes the backToMenu bool into true
     public void backToMenu()
     {
-        if (!systempause)
+        if (state != name)
         {
-            if (state != name)
-            {
-                callAnimation(state);
-                reverseAnimation(name);
-                state = name;
-                printState();
-                GameObject.Find("DataManager").GetComponent<DataManager>().setGameObject(state);
-            }
-            else if (state == name && state != "menu")
-            {
-                callAnimation(state);
-                reverseAnimation("menu");
-                state = "menu";
-                printState();
-                GameObject.Find("DataManager").GetComponent<DataManager>().setGameObject(state);
-            }
-            systempause = true;
-            systempauseCounter = 0;
+            callAnimation(state);
+            reverseAnimation(name);
+            state = name;
+            printState();
+            GameObject.Find("DataManager").GetComponent<DataManager>().setGameObject(state);
+        }
+        else if (state == name && state != "menu")
+        {
+            callAnimation(state);
+            reverseAnimation("menu");
+            state = "menu";
+            printState();
+            GameObject.Find("DataManager").GetComponent<DataManager>().setGameObject(state);
         }
     }
 

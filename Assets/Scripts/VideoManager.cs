@@ -5,16 +5,26 @@ using UnityEngine.Video;
 
 public class VideoManager : MonoBehaviour {
 
-    private GameObject videoPlaceHolder; 
+    GameObject videoPlaceholder;
 
-	// Use this for initialization
-	void Start () {
-        videoPlaceHolder = GameObject.Find("VideoPlaceholder");
-        videoPlaceHolder.SetActive(false);
-        foreach (GameObject foo in GameObject.FindGameObjectsWithTag("videoPreview"))
+    public RenderTexture previewTexture;
+    public RenderTexture fullVideoTexture;
+
+    // Use this for initialization
+    void Start () {
+
+        videoPlaceholder = GameObject.Find("VideoPlaceholder");
+        videoPlaceholder.SetActive(false);
+
+		foreach(GameObject preview in GameObject.FindGameObjectsWithTag("videoPreview"))
         {
-            VideoPlayer player = foo.GetComponent<VideoPlayer>();
-            player.frame = 250;
+            GameObject parent = preview.transform.parent.gameObject;
+            VideoPlayer player = preview.GetComponent<VideoPlayer>();
+            player.renderMode = VideoRenderMode.RenderTexture;
+            player.targetTexture = previewTexture;
+            player.frame = 100;
+            player.Prepare();
+            player.Play();
             player.Pause();
         }
 	}
@@ -26,11 +36,28 @@ public class VideoManager : MonoBehaviour {
 
     private void Action(GameObject selectedSphere)
     {
-        videoPlaceHolder.SetActive(true);
-        GameObject selectedVideo = selectedSphere.transform.GetChild(1).gameObject;
-        VideoPlayer player = selectedVideo.GetComponent<VideoPlayer>();
-        Debug.Log("Bis hier hin und " + player);
-        player.Play();
+
+        GameObject selectedVideo = selectedSphere.transform.GetChild(0).gameObject;
+        VideoPlayer player = selectedVideo.GetComponent<VideoPlayer>();    
+
+        if(player.isPlaying)
+        {
+            player.Pause();
+        }
+        else if(player.frame >= 1)
+        {
+            videoPlaceholder.SetActive(true);
+            player.Play();
+        }
+        else
+        {
+            player.renderMode = VideoRenderMode.RenderTexture;
+            player.targetTexture = fullVideoTexture;
+            player.frame = 1;
+            videoPlaceholder.SetActive(true);
+            player.Play();
+        }
+        
     }
 
     public void callMethodForGameObject(GameObject obj)

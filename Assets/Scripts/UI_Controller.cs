@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class UI_Controller : MonoBehaviour {
 
-    public InputField textBox;
+    //public InputField textBox;
     [HideInInspector]
     public static GameObject hologram;
     [HideInInspector]
@@ -42,7 +42,7 @@ public class UI_Controller : MonoBehaviour {
     {
 
         hologramText.text = "Changing...";
-        hologramText.text = textBox.text;
+        //hologramText.text = textBox.text;
     } 
 
     public void OpenOptions()

@@ -28,7 +28,8 @@ public class TouchController : MonoBehaviour {
     //private GameObject countField;
     private Text counter, position, direction, eventText, orientation, position3;
     Vector2 startTouch1, startTouch2, startTouch3;
-    bool switchXOrientation, switchYOrientation, switchLayer;
+    bool switchXOrientation, switchYOrientation, switchLayer, doubleTapCooldown;
+    float cooldownStarted;
 
     // Use this for initialization
     void Start () {
@@ -53,14 +54,21 @@ public class TouchController : MonoBehaviour {
         switchXOrientation = false;
         switchYOrientation = false;
         switchLayer = false;
-
-
-        //Subscribe to events using the EventManager:
-        EventManager.StartListening(EVENT_SCROLL_HORIZONTAL, scrollUp);
+        doubleTapCooldown = true;
+        cooldownStarted = 0f;
     }
 
     // Update is called once per frame
     void Update () {
+
+        if(!doubleTapCooldown)
+        {
+            if((Time.time - cooldownStarted) > 1f)
+            {
+                doubleTapCooldown = true;
+            }
+        }
+
         //checkNumberOfTouches();
         if(Input.touchCount == 1)
         {
@@ -74,12 +82,6 @@ public class TouchController : MonoBehaviour {
         {
             touchWith3Finger();
         }
-    }
-
-    void scrollUp(float parameter)
-    {
-        //GameObject.Find("Debug").GetComponent<Text>().text = "Scroll Horizontal";
-        //GameObject.Find("DataManager").GetComponent<DataManager>().onScrollHorizontal(parameter);
     }
 
     // 3 Finger touch gestures
@@ -258,10 +260,12 @@ public class TouchController : MonoBehaviour {
                 startTouch1 = touch1.position;
             }
 
-            if (touch1.tapCount == 2)
+            if (touch1.tapCount == 2 && doubleTapCooldown)
             {
+                doubleTapCooldown = false;
+                cooldownStarted = Time.time;
                 EventManager.TriggerEvent(EVENT_DOUBLE_TAP, 0);
-                return;
+                
             }
             if ((touch1.position.y - startTouch1.y) > Y_SWIPE_DIFFERENCE)
             {
@@ -390,79 +394,4 @@ public class TouchController : MonoBehaviour {
         }
     }
 
-    /*void checkNumberOfTouches()
-    {
-        int fingerCount = 0;
-        foreach (Touch touch1 in Input.touches)
-        {
-
-            if (touch1.phase != TouchPhase.Ended && touch1.phase != TouchPhase.Canceled)
-            {
-                fingerCount++;
-            }
-        }
-
-        Touch touch = Input.GetTouch(0);
-
-        if (touch.deltaPosition.x > 20 && touch.deltaPosition.y > 20)
-        {
-            direction.text = "Bewegung: nach rechts oben";
-        }
-        else if (touch.deltaPosition.x > 20 && touch.deltaPosition.y > -20)
-        {
-            direction.text = "Bewegung: nach rechts unten";
-        }
-        else if (touch.deltaPosition.y > 20 && touch.deltaPosition.x > -20)
-        {
-            direction.text = "Bewegung: nach links oben";
-        }
-        else if (touch.deltaPosition.y > -20 && touch.deltaPosition.x > -20)
-        {
-            direction.text = "Bewegung: nach links unten";
-        }
-        else if (touch.deltaPosition.x > 20)
-        {
-            direction.text = "Bewegung: nach rechts";
-        }
-        else if (touch.deltaPosition.x > -20)
-        {
-            direction.text = "Bewegung: nach links";
-        }
-        else if (touch.deltaPosition.y > 20)
-        {
-            direction.text = "Bewegung: nach oben";
-        }
-        else if (touch.deltaPosition.y > -20)
-        {
-            direction.text = "Bewegung: nach unten";
-        }
-
-
-        position.text = "Position: " + touch.position;
-
-        switch (touch.phase)
-        {
-            case TouchPhase.Began:
-                eventText.text = "Event: Touch Start";
-                break;
-            case TouchPhase.Moved:
-                eventText.text = "Event: Finger bewegt sich";
-                break;
-            case TouchPhase.Ended:
-                eventText.text = "Event: Touch Ende";
-                break;
-            case TouchPhase.Stationary:
-                eventText.text = "Event: Finger bewegt sich nicht";
-                break;
-            case TouchPhase.Canceled:
-                eventText.text = "Event: Touch abgebrochen";
-                break;
-            default:
-                eventText.text = "Event: ";
-                break;
-        }
-
-        if (fingerCount > 0)
-            counter.text = "User has " + fingerCount + " finger(s) touching the screen";
-    }*/
 }

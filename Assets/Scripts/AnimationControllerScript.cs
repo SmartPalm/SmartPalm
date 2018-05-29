@@ -32,7 +32,6 @@ public class AnimationControllerScript : MonoBehaviour {
 
     private void fillDictionary()
     {
-        PlayableDic.Add("toilet", GameObject.Find("TestAnimationTarget").GetComponent<PlayableDirector>());
         PlayableDic.Add("menu", GameObject.Find("menu").GetComponent<PlayableDirector>());
         PlayableDic.Add("BubbleExplorerFor3DModels", GameObject.Find("3DModelFolder").GetComponent<PlayableDirector>());
         PlayableDic.Add("BubbleExplorerForBluetooth", GameObject.Find("Bluetooth").GetComponent<PlayableDirector>());
