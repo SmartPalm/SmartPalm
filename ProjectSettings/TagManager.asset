@@ -10,6 +10,8 @@ TagManager:
   - video
   - videoPreview
   - bluetooth
+  - audio
+  - document
   layers:
   - Default
   - TransparentFX

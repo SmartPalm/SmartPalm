@@ -39,7 +39,7 @@ public class LookAtCamera : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Debug.Log("Update happend in " + this);
+        //Debug.Log("Update happend in " + this);
         if (gameObject.tag == "Folder" || gameObject.tag == "video" || gameObject.tag == "bluetooth")
         {
             xRot = target.eulerAngles.x - 120f;

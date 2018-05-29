@@ -30,7 +30,7 @@ public class FolderManager : MonoBehaviour
         foreach (Transform child in transform)
         {
             //Debug.Log(child);
-            if (child.gameObject.tag == "Folder" || child.gameObject.tag == "video" || child.gameObject.tag == "bluetooth")
+            if (child.gameObject.tag == "Folder" || child.gameObject.tag == "video" || child.gameObject.tag == "bluetooth" || child.gameObject.tag == "audio" || child.gameObject.tag == "document")
             {
                 Children.Add(child.gameObject);
                 saveComparedPositionToCamera(child.gameObject);
@@ -155,13 +155,23 @@ public class FolderManager : MonoBehaviour
         }
         else if (chosenFile.tag == "video")
         {
-            printFixedState(true);
+            printFixedState("video");
             GameObject.Find("VideoManager").GetComponent<VideoManager>().callMethodForGameObject(chosenFile);
         }
         else if (chosenFile.tag == "bluetooth")
         {
-            printFixedState(false);
-            GameObject.Find("Bluetooth").GetComponent<NativeAndroidBluetooth>().callMethodForGameObject(chosenFile);
+            printFixedState("bluetooth");
+            GameObject.Find("BluetoothManager").GetComponent<NativeAndroidBluetooth>().callMethodForGameObject(chosenFile);
+        }
+        else if (chosenFile.tag == "audio")
+        {
+            printFixedState("audio");
+            GameObject.Find("AudioManager").GetComponent<AudioManagerScript>().callMethodForGameObject(chosenFile);
+        }
+        else if (chosenFile.tag == "document")
+        {
+            printFixedState("document");
+            GameObject.Find("DocumentManager").GetComponent<DocumentManager>().callMethodForGameObject(chosenFile);
         }
     }
 
@@ -203,16 +213,20 @@ public class FolderManager : MonoBehaviour
         logState();
     }
 
-    public void printFixedState(bool typeOfAction)
+    public void printFixedState(string typeOfAction)
     {
-        if (typeOfAction)
+        if (typeOfAction == "video")
         {
             Debug.Log("The state is 'playing a video', the chosenFile is at this time " + chosenFile + " and was brought to you by " + this);
             GameObject.Find("Debug").GetComponent<Text>().text = "playing Video";
-        } else
+        } else if (typeOfAction == "bluetooth")
         {
             Debug.Log("The state is 'connecting', the chosenFile is at this time " + chosenFile + " and was brought to you by " + this);
             GameObject.Find("Debug").GetComponent<Text>().text = "connecting...";
+        } else if (typeOfAction == "audio")
+        {
+            Debug.Log("The state is 'playing audio', the chosenFile is at this time " + chosenFile + " and was brought to you by " + this);
+            GameObject.Find("Debug").GetComponent<Text>().text = "playing audio";
         }
     }
 }
