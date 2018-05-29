@@ -39,6 +39,7 @@ public class AnimationControllerScript : MonoBehaviour {
         PlayableDic.Add("BubbleExplorerForVideo", GameObject.Find("Video").GetComponent<PlayableDirector>());
         PlayableDic.Add("armbones", GameObject.Find("armbones").GetComponent<PlayableDirector>());
         PlayableDic.Add("skeleton", GameObject.Find("skeleton").GetComponent<PlayableDirector>());
+        PlayableDic.Add("smartpalmVoxle", GameObject.Find("smartpalmVoxle").GetComponent<PlayableDirector>());
         PlayableDic.Add("DevFolder", GameObject.Find("DevFolder").GetComponent<PlayableDirector>());
     }
 

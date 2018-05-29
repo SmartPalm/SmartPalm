@@ -144,6 +144,7 @@ public class FolderManager : MonoBehaviour
             callAnimation(state);
             
             state = chosenFile.GetComponent<DirectoryPathScript>().directory;
+            printState();
             GameObject.Find("DataManager").GetComponent<DataManager>().setGameObject(state);
 
             Debug.Log("Selected Folder: " + chosenFile + " and the new directotry is: " + chosenFile.GetComponent<DirectoryPathScript>().directory + " and the GameObject in Focus is: " + GameObject.Find("DataManager").GetComponent<DataManager>().currentDisplayedObject);
@@ -151,10 +152,12 @@ public class FolderManager : MonoBehaviour
         }
         else if (chosenFile.tag == "video") 
         {
+            printFixedState(true);
             GameObject.Find("VideoManager").GetComponent<VideoManager>().callMethodForGameObject(chosenFile);
         }
         else if (chosenFile.tag == "bluetooth")
         {
+            printFixedState(false);
             GameObject.Find("Bluetooth").GetComponent<NativeAndroidBluetooth>().callMethodForGameObject(chosenFile);
         }
     }
@@ -167,12 +170,14 @@ public class FolderManager : MonoBehaviour
             callAnimation(state);
             reverseAnimation(name);
             state = name;
+            printState();
             GameObject.Find("DataManager").GetComponent<DataManager>().setGameObject(state);
         } else if(state == name && state != "menu")
         {
             callAnimation(state);
             reverseAnimation("menu");
             state = "menu";
+            printState();
             GameObject.Find("DataManager").GetComponent<DataManager>().setGameObject(state);
         }
     }
@@ -192,5 +197,18 @@ public class FolderManager : MonoBehaviour
     {
         Debug.Log("The state is " + state + ", the chosenFile is at this time " + chosenFile + " and was brought to you by " + this);
         logState();
+    }
+
+    public void printFixedState(bool typeOfAction)
+    {
+        if (typeOfAction)
+        {
+            Debug.Log("The state is 'playing a video', the chosenFile is at this time " + chosenFile + " and was brought to you by " + this);
+            GameObject.Find("Debug").GetComponent<Text>().text = "playing Video";
+        } else
+        {
+            Debug.Log("The state is 'connecting', the chosenFile is at this time " + chosenFile + " and was brought to you by " + this);
+            GameObject.Find("Debug").GetComponent<Text>().text = "connecting...";
+        }
     }
 }
