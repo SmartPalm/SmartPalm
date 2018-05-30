@@ -51,7 +51,7 @@ public class NFCShaking : MonoBehaviour
             isLandscape = false;
         }
 
-        if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold && isLandscape)
+        if (deltaAcceleration.sqrMagnitude >= shakeDetectionThreshold/* && isLandscape*/)
         {
             // Perform your "shaking actions" here. If necessary, add suitable
             // guards in the if check above to avoid redundant handling during

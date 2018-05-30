@@ -13,10 +13,21 @@ public class NativeAndroidBluetooth : MonoBehaviour
     [SerializeField]
     private TextMesh _deviceList;
 
+    private GameObject offObj;
+    private GameObject onObj;
     private List<string> namesOfNearbyDevices = new List<string>();
     private string jsonOfNearbyDevices;
     private string[] deviceNames;
     private bool currentlySearching = false;
+    private bool stateOfIcon = false;
+
+
+    private void Start()
+    {
+        offObj = GameObject.Find("QuadOff");
+        onObj = GameObject.Find("QuadOn");
+        onObj.SetActive(stateOfIcon);
+    }
 
     // Update is called once per frame
     void Update()
@@ -47,6 +58,7 @@ public class NativeAndroidBluetooth : MonoBehaviour
     {
         if (obj.name.Equals("SphereForChangeSearchState"))
         {
+            changeIconDisplay();
             if (currentlySearching)
             {
                 stopGetPairedDevices();
@@ -89,6 +101,13 @@ public class NativeAndroidBluetooth : MonoBehaviour
         {
             _deviceList.text = _deviceList.text + device + "\n";
         }
+    }
+
+    private void changeIconDisplay()
+    {
+        offObj.SetActive(stateOfIcon);
+        onObj.SetActive(!stateOfIcon);
+        stateOfIcon = !stateOfIcon;
     }
 
     public void askForBluetoothPermission()
