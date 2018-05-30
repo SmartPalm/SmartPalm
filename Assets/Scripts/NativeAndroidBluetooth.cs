@@ -44,11 +44,6 @@ public class NativeAndroidBluetooth : MonoBehaviour
         }
 
         updateCurrentlySearching();
-
-        if (Time.time - startTime > 10.0f)
-        {
-
-        }
     }
 
     public void callMethodForGameObject(GameObject obj)
@@ -79,12 +74,12 @@ public class NativeAndroidBluetooth : MonoBehaviour
             AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
 
             bool oldSearching = currentlySearching;
-            currentlySearching = btService.GetStatic<bool>("getCurrentlyScanningForNearbyDevices");
+            currentlySearching = btServiceClass.CallStatic<bool>("getCurrentlyScanningForNearbyDevices");
             if (oldSearching != currentlySearching)
             {
                 changeIconDisplay();
             }
-            _deviceList.text = currentlySearching.ToString();
+            //_deviceList.text = currentlySearching.ToString();
         }
     }
 
@@ -93,9 +88,12 @@ public class NativeAndroidBluetooth : MonoBehaviour
         jsonOfNearbyDevices = jsonOfNearbyDevices.Replace("[", "");
         jsonOfNearbyDevices = jsonOfNearbyDevices.Replace("]", "");
         jsonOfNearbyDevices = jsonOfNearbyDevices.Replace("\"", "");
-        /*if (currentlySearching)
+
+        deviceNames = jsonOfNearbyDevices.Split(',');
+
+        if (currentlySearching)
         {
-            _deviceList.text = "Searching ...";
+            _deviceList.text = "Searching ...\n";
         }
         else
         {
@@ -104,7 +102,7 @@ public class NativeAndroidBluetooth : MonoBehaviour
         foreach (string device in deviceNames)
         {
             _deviceList.text = _deviceList.text + device + "\n";
-        }*/
+        }
     }
 
     private void changeIconDisplay()
@@ -140,7 +138,6 @@ public class NativeAndroidBluetooth : MonoBehaviour
             btService.Call("startGettingPairedDevices");
             //_searchingLabel.text = "Searching for devices...";
             jsonOfNearbyDevices = "";
-            startTime = Time.time;
         }
     }
 

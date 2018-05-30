@@ -18,9 +18,9 @@ public class UI_Controller : MonoBehaviour {
 
     void Start () {
         options = GameObject.Find("OptionsMenu");
-        hologram = GameObject.Find("holotext");
-        hologramText = hologram.GetComponent<TextMesh>();
-        hologramText.text = "Hologram is online";
+        //hologram = GameObject.Find("holotext");
+        //hologramText = hologram.GetComponent<TextMesh>();
+        //hologramText.text = "Hologram is online";
         options.SetActive(false);
 
         float halfScreen = (float) Screen.height / 2;
