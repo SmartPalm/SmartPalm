@@ -7,8 +7,8 @@ using UnityEngine.UI;
 public class TouchController : MonoBehaviour {
 
 
-    private static int Y_FINGER_DIFFERENCE_THREE = 450;
-    private static int Y_FINGER_DIFFERENCE_TWO = 250;
+    private static int Y_FINGER_DIFFERENCE_THREE = 550;
+    private static int Y_FINGER_DIFFERENCE_TWO = 350;
     private static int X_FINGER_DIFFERENCE = 150;
     private static int X_SWIPE_DIFFERENCE = 50;
     private static int X_SWIPE_DIFFERENCE_SMALL = 35;
@@ -16,6 +16,7 @@ public class TouchController : MonoBehaviour {
 
     //listener events
     public static string EVENT_DOUBLE_TAP = "doubleTap";
+    public static string EVENT_DOUBLE_TAP_TWO = "threeDoubleTap";
     public static string EVENT_SCROLL_VERTICAL = "scrollVertical";
     public static string EVENT_SCROLL_HORIZONTAL = "scrollHorizontal";
 
@@ -229,6 +230,7 @@ public class TouchController : MonoBehaviour {
                     Screen.orientation = ScreenOrientation.LandscapeLeft;
                     switchXOrientation = switchYOrientation = false;
                     //orientation.text = "Landscape";
+                    GameObject.Find("VideoManager").GetComponent<VideoManager>().displayVideoLandscape();
                     EventManager.TriggerEvent(ORIENTATION_LANDSCAPE, 0);
                 }
                 else if ((startTouch1.x - touch1.position.x) < -X_SWIPE_DIFFERENCE && (startTouch2.x - touch2.position.x) < -X_SWIPE_DIFFERENCE && (startTouch3.x - touch3.position.x) < -X_SWIPE_DIFFERENCE && Screen.orientation == ScreenOrientation.Landscape)
@@ -317,6 +319,14 @@ public class TouchController : MonoBehaviour {
                 //position.text = "Start 1: " + startTouch1;
                 startTouch2 = touch2.position;
                 //position3.text = "Start 2: " + startTouch2;
+            }
+
+            if (touch1.tapCount == 2 && touch2.tapCount == 2 && doubleTapCooldown)
+            {
+                doubleTapCooldown = false;
+                cooldownStarted = Time.time;
+                EventManager.TriggerEvent(EVENT_DOUBLE_TAP_TWO, 0);
+                return;
             }
 
             if (start == true)

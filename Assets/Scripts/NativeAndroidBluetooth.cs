@@ -5,120 +5,143 @@ using System.Collections.Generic;
 
 public class NativeAndroidBluetooth : MonoBehaviour
 {
-		private const string BLUETOOTH_CLASS = "com.smartpalm.nativebluetoothplugin.BluetoothService";
+    private const string BLUETOOTH_CLASS = "com.smartpalm.nativebluetoothplugin.BluetoothService";
 
-		//[SerializeField]
+    //[SerializeField]
     //private Text _searchingLabel;
 
-		[SerializeField]
-        private TextMesh _deviceList;
+    [SerializeField]
+    private TextMesh _deviceList;
 
-		private List<string> namesOfNearbyDevices = new List<string>();
-		private string jsonOfNearbyDevices;
-        private string[] deviceNames;
-		private bool currentlySearching = false;
+    private List<string> namesOfNearbyDevices = new List<string>();
+    private string jsonOfNearbyDevices;
+    private string[] deviceNames;
+    private bool currentlySearching = false;
 
-		// Update is called once per frame
-		void Update () {
-			using (AndroidJavaClass btServiceClass = new AndroidJavaClass (BLUETOOTH_CLASS)) {
-                string oldJson = jsonOfNearbyDevices;
-				jsonOfNearbyDevices = btServiceClass.CallStatic<string>("getNearbyDeviceNamesAsJson");
-                if (!oldJson.Equals(jsonOfNearbyDevices)) {
+    // Update is called once per frame
+    void Update()
+    {
+        using (AndroidJavaClass btServiceClass = new AndroidJavaClass(BLUETOOTH_CLASS))
+        {
+            string oldJson = jsonOfNearbyDevices;
+            jsonOfNearbyDevices = btServiceClass.CallStatic<string>("getNearbyDeviceNamesAsJson");
+            if (!oldJson.Equals(jsonOfNearbyDevices))
+            {
                 updateDeviceList();
-                }
-			}
+            }
+        }
 
-			updateCurrentlySearching();
+        updateCurrentlySearching();
 
-			if (Input.deviceOrientation == DeviceOrientation.LandscapeLeft || Input.deviceOrientation == DeviceOrientation.LandscapeRight) {
-         // landscape
-     	}
-     	else {
-				// not landscape
-     	}
-		}
+        if (Input.deviceOrientation == DeviceOrientation.LandscapeLeft || Input.deviceOrientation == DeviceOrientation.LandscapeRight)
+        {
+            // landscape
+        }
+        else
+        {
+            // not landscape
+        }
+    }
 
-		public void callMethodForGameObject(GameObject obj) {
-			if (obj.name.Equals("SphereForChangeSearchState")) {
-				if (currentlySearching) {
-					stopGetPairedDevices();
-				}
-				else {
-					startGetPairedDevices();
-				}
-			}
-			else if (obj.name.Equals("SphereForConnectToNearest")) {
-				connectToNearestPairedDevice();
-			}
-  	}
+    public void callMethodForGameObject(GameObject obj)
+    {
+        if (obj.name.Equals("SphereForChangeSearchState"))
+        {
+            if (currentlySearching)
+            {
+                stopGetPairedDevices();
+            }
+            else
+            {
+                startGetPairedDevices();
+            }
+        }
+        else if (obj.name.Equals("SphereForConnectToNearest"))
+        {
+            connectToNearestPairedDevice();
+        }
+    }
 
-		void updateCurrentlySearching() {
-			using (AndroidJavaClass btServiceClass = new AndroidJavaClass (BLUETOOTH_CLASS)){
-					AndroidJavaObject btService = btServiceClass.CallStatic<AndroidJavaObject> ("getInstance");
-					AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+    void updateCurrentlySearching()
+    {
+        using (AndroidJavaClass btServiceClass = new AndroidJavaClass(BLUETOOTH_CLASS))
+        {
+            AndroidJavaObject btService = btServiceClass.CallStatic<AndroidJavaObject>("getInstance");
+            AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
 
-					currentlySearching = btService.CallStatic<bool>("getCurrentlyScanningForNearbyDevices");
-			}
+            currentlySearching = btService.CallStatic<bool>("getCurrentlyScanningForNearbyDevices");
+        }
 
-			if (!currentlySearching) {
-				//_searchingLabel.text = "";
-			}
-		}
+        if (!currentlySearching)
+        {
+            //_searchingLabel.text = "";
+        }
+    }
 
-		void updateDeviceList() {
-      jsonOfNearbyDevices = jsonOfNearbyDevices.Replace("[", "");
-      jsonOfNearbyDevices = jsonOfNearbyDevices.Replace("]", "");
-      jsonOfNearbyDevices = jsonOfNearbyDevices.Replace("\"", "");
-      deviceNames = jsonOfNearbyDevices.Split(',');
-      _deviceList.text = "";
-      foreach (string device in deviceNames) {
-        _deviceList.text = _deviceList.text + device + "\n";
-      }
-		}
+    void updateDeviceList()
+    {
+        jsonOfNearbyDevices = jsonOfNearbyDevices.Replace("[", "");
+        jsonOfNearbyDevices = jsonOfNearbyDevices.Replace("]", "");
+        jsonOfNearbyDevices = jsonOfNearbyDevices.Replace("\"", "");
+        deviceNames = jsonOfNearbyDevices.Split(',');
+        _deviceList.text = "";
+        foreach (string device in deviceNames)
+        {
+            _deviceList.text = _deviceList.text + device + "\n";
+        }
+    }
 
- 		public void askForBluetoothPermission() {
-      using (AndroidJavaClass btServiceClass = new AndroidJavaClass (BLUETOOTH_CLASS)){
-					AndroidJavaObject btService = btServiceClass.CallStatic<AndroidJavaObject> ("getInstance");
-					AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-					AndroidJavaObject context = jc.GetStatic<AndroidJavaObject>("currentActivity");
+    public void askForBluetoothPermission()
+    {
+        using (AndroidJavaClass btServiceClass = new AndroidJavaClass(BLUETOOTH_CLASS))
+        {
+            AndroidJavaObject btService = btServiceClass.CallStatic<AndroidJavaObject>("getInstance");
+            AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+            AndroidJavaObject context = jc.GetStatic<AndroidJavaObject>("currentActivity");
 
-					btService.Call ("setMainContext", context);
-					btService.Call ("connectToBluetooth");
-			}
- 		}
+            btService.Call("setMainContext", context);
+            btService.Call("connectToBluetooth");
+        }
+    }
 
-		public void startGetPairedDevices() {
-			using (AndroidJavaClass btServiceClass = new AndroidJavaClass (BLUETOOTH_CLASS)){
-					AndroidJavaObject btService = btServiceClass.CallStatic<AndroidJavaObject> ("getInstance");
-					AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-					AndroidJavaObject context = jc.GetStatic<AndroidJavaObject>("currentActivity");
+    public void startGetPairedDevices()
+    {
+        using (AndroidJavaClass btServiceClass = new AndroidJavaClass(BLUETOOTH_CLASS))
+        {
+            AndroidJavaObject btService = btServiceClass.CallStatic<AndroidJavaObject>("getInstance");
+            AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+            AndroidJavaObject context = jc.GetStatic<AndroidJavaObject>("currentActivity");
 
-					btService.Call ("setMainContext", context);
-					btService.Call ("connectToBluetooth");
-					btService.Call ("startGettingPairedDevices");
-					//_searchingLabel.text = "Searching for devices...";
-          jsonOfNearbyDevices = "";
-					_deviceList.text = "Bluetoothgeräte";
-			}
-		}
+            btService.Call("setMainContext", context);
+            btService.Call("connectToBluetooth");
+            btService.Call("startGettingPairedDevices");
+            //_searchingLabel.text = "Searching for devices...";
+            jsonOfNearbyDevices = "";
+            _deviceList.text = "Bluetoothgeräte";
+        }
+    }
 
-		public void stopGetPairedDevices() {
-			using (AndroidJavaClass btServiceClass = new AndroidJavaClass (BLUETOOTH_CLASS)){
-					AndroidJavaObject btService = btServiceClass.CallStatic<AndroidJavaObject> ("getInstance");
-					AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-					AndroidJavaObject context = jc.GetStatic<AndroidJavaObject>("currentActivity");
+    public void stopGetPairedDevices()
+    {
+        using (AndroidJavaClass btServiceClass = new AndroidJavaClass(BLUETOOTH_CLASS))
+        {
+            AndroidJavaObject btService = btServiceClass.CallStatic<AndroidJavaObject>("getInstance");
+            AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+            AndroidJavaObject context = jc.GetStatic<AndroidJavaObject>("currentActivity");
 
-					btService.Call ("stopGettingPairedDevices");
-			}
-		}
+            btService.Call("stopGettingPairedDevices");
+        }
+    }
 
-    public void connectToNearestPairedDevice() {
-			using (AndroidJavaClass btServiceClass = new AndroidJavaClass (BLUETOOTH_CLASS)){
-					AndroidJavaObject btService = btServiceClass.CallStatic<AndroidJavaObject> ("getInstance");
-					AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-					AndroidJavaObject context = jc.GetStatic<AndroidJavaObject>("currentActivity");
+    public void connectToNearestPairedDevice()
+    {
+        using (AndroidJavaClass btServiceClass = new AndroidJavaClass(BLUETOOTH_CLASS))
+        {
+            AndroidJavaObject btService = btServiceClass.CallStatic<AndroidJavaObject>("getInstance");
+            AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+            AndroidJavaObject context = jc.GetStatic<AndroidJavaObject>("currentActivity");
 
-					btService.Call ("connectToNearestPairedDevice");
-			}
-		}
+            btService.Call("connectToNearestPairedDevice");
+        }
+    }
 }

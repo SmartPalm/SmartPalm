@@ -38,4 +38,20 @@ public class AudioManagerScript : MonoBehaviour {
             playingAudio = obj.name;
         }   
     }
+
+    public void changePlayingState()
+    {
+        AudioSource source = GameObject.Find(playingAudio).GetComponent<AudioSource>();
+        if(source != null)
+        {
+            if (source.isPlaying)
+            {
+                source.Pause();
+            }
+            else
+            {
+                source.Play();
+            }
+        }        
+    }
 }

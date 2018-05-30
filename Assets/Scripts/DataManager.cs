@@ -22,6 +22,8 @@ public class DataManager : MonoBehaviour {
         EventManager.StartListening(TouchController.EVENT_LAYER_UP, onLayerUp);
 
         EventManager.StartListening(TouchController.EVENT_LAYER_DOWN, onLayerDown);
+
+        EventManager.StartListening(TouchController.EVENT_DOUBLE_TAP_TWO, onDoubleTapThree);
         currentDisplayedObject = GameObject.Find("menu");
         canHaveAction = true;
     }
@@ -32,18 +34,19 @@ public class DataManager : MonoBehaviour {
 
     void onLayerUp( float changed )
     {
-        if (currentDisplayedObject.GetComponent<DirectoryPathScript>().isNewDirectory)
-        {
-            currentDisplayedObject.GetComponent<FolderManager>().backToMenu();
-        } else
-        {
-            lastDisplayedObject.GetComponent<FolderManager>().backToMenu();
-        }
+        
     }
 
     void onLayerDown( float changed )
     {
-        
+        if (currentDisplayedObject.GetComponent<DirectoryPathScript>().isNewDirectory)
+        {
+            currentDisplayedObject.GetComponent<FolderManager>().backToMenu();
+        }
+        else
+        {
+            lastDisplayedObject.GetComponent<FolderManager>().backToMenu();
+        }
     }
 
     void onDoubleTap( float changed )
@@ -58,19 +61,19 @@ public class DataManager : MonoBehaviour {
 
     private void onScrollHorizontal(float changed)
     {
-        //GameObject.Find("Debug").GetComponent<Text>().text = "Scroll Horizontal";
-        if (canHaveAction)
-        {
-            currentDisplayedObject.transform.Rotate(0, -changed, 0, Space.World);
-        }
+        currentDisplayedObject.transform.Rotate(0, -changed, 0, Space.World);
+
     }
 
     private void onScrollVertical(float changed )
     {
-        if(canHaveAction)
-        {
-            currentDisplayedObject.transform.Rotate(changed, 0, 0, Space.World);
-        }
+        currentDisplayedObject.transform.Rotate(changed, 0, 0, Space.World);
+
+    }
+
+    private void onDoubleTapThree(float value)
+    {
+        GameObject.Find("AudioManager").GetComponent<AudioManagerScript>().changePlayingState();
     }
 
     public void setGameObject(string objectName)

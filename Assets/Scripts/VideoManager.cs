@@ -5,10 +5,12 @@ using UnityEngine.Video;
 
 public class VideoManager : MonoBehaviour {
 
-    GameObject videoPlaceholder;
+    GameObject videoPlaceholder, fullscreenPlaceholder;
+    VideoPlayer player;
 
     public RenderTexture previewTexture;
     public RenderTexture fullVideoTexture;
+    public RenderTexture landscapeTexture;
 
     // Use this for initialization
     void Start () {
@@ -16,16 +18,19 @@ public class VideoManager : MonoBehaviour {
         videoPlaceholder = GameObject.Find("VideoPlaceholder");
         videoPlaceholder.SetActive(false);
 
+        fullscreenPlaceholder = GameObject.Find("VideoLandscapePlaceholder");
+        fullscreenPlaceholder.SetActive(false);
+
 		foreach(GameObject preview in GameObject.FindGameObjectsWithTag("videoPreview"))
         {
             GameObject parent = preview.transform.parent.gameObject;
-            VideoPlayer player = preview.GetComponent<VideoPlayer>();
-            player.renderMode = VideoRenderMode.RenderTexture;
-            player.targetTexture = previewTexture;
-            player.frame = 100;
-            player.Prepare();
-            player.Play();
-            player.Pause();
+            VideoPlayer currentPlayer = preview.GetComponent<VideoPlayer>();
+            currentPlayer.renderMode = VideoRenderMode.RenderTexture;
+            currentPlayer.targetTexture = previewTexture;
+            currentPlayer.frame = 100;
+            currentPlayer.Prepare();
+            currentPlayer.Play();
+            currentPlayer.Pause();
         }
 	}
 	
@@ -34,11 +39,11 @@ public class VideoManager : MonoBehaviour {
 		
 	}
 
-    private void Action(GameObject selectedSphere)
+    private void action(GameObject selectedSphere)
     {
 
         GameObject selectedVideo = selectedSphere.transform.GetChild(0).gameObject;
-        VideoPlayer player = selectedVideo.GetComponent<VideoPlayer>();    
+        player = selectedVideo.GetComponent<VideoPlayer>();    
 
         if(player.isPlaying)
         {
@@ -51,17 +56,57 @@ public class VideoManager : MonoBehaviour {
         }
         else
         {
-            player.renderMode = VideoRenderMode.RenderTexture;
-            player.targetTexture = fullVideoTexture;
-            player.frame = 1;
-            videoPlaceholder.SetActive(true);
-            player.Play();
+            displayVideoLandscape(false);
         }
         
     }
 
     public void callMethodForGameObject(GameObject obj)
     {
-        Action(obj);
+        action(obj);
+    }
+
+    public void stopVideos()
+    {
+        foreach(GameObject videoPlayer in GameObject.FindGameObjectsWithTag("videoPreview"))
+        {
+            videoPlayer.GetComponent<VideoPlayer>().Stop();
+        }
+    }
+
+    public void displayVideoLandscape(bool landscape = true)
+    {
+        if(landscape)
+        {
+            VideoPlayer playingPlayer = null;
+
+            foreach (GameObject videoPlayer in GameObject.FindGameObjectsWithTag("videoPreview"))
+            {
+                VideoPlayer player = videoPlayer.GetComponent<VideoPlayer>();
+                if (player.isPlaying)
+                {
+                    playingPlayer = player;
+                    break;
+                }
+            }
+
+            if (playingPlayer != null)
+            {
+                playingPlayer.renderMode = VideoRenderMode.CameraFarPlane;
+                //playingPlayer.targetTexture = fullVideoTexture;
+                playingPlayer.aspectRatio = VideoAspectRatio.FitVertically;
+                //fullscreenPlaceholder.SetActive(true);
+                //fullscreenPlaceholder.GetComponent<Image>
+                //playingPlayer.Play();
+            }
+        }
+        else
+        {
+            player.renderMode = VideoRenderMode.RenderTexture;
+            player.targetTexture = fullVideoTexture;
+            player.frame = 1;
+            videoPlaceholder.SetActive(true);
+            player.Play();
+        }
     }
 }

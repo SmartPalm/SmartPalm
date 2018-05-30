@@ -141,36 +141,35 @@ public class FolderManager : MonoBehaviour
     // Changes the forwardToSelection bool into true
     public void makeSelection()
     {
-
         if (GameObject.Find(state).GetComponent<DirectoryPathScript>().isNewDirectory && chosenFile.tag == "Folder")
         {
             callAnimation(state);
 
             state = chosenFile.GetComponent<DirectoryPathScript>().directory;
-            printState();
+            //printState();
             GameObject.Find("DataManager").GetComponent<DataManager>().setGameObject(state);
 
-            Debug.Log("Selected Folder: " + chosenFile + " and the new directotry is: " + chosenFile.GetComponent<DirectoryPathScript>().directory + " and the GameObject in Focus is: " + GameObject.Find("DataManager").GetComponent<DataManager>().currentDisplayedObject);
+            //Debug.Log("Selected Folder: " + chosenFile + " and the new directotry is: " + chosenFile.GetComponent<DirectoryPathScript>().directory + " and the GameObject in Focus is: " + GameObject.Find("DataManager").GetComponent<DataManager>().currentDisplayedObject);
             reverseAnimation(state);
         }
         else if (chosenFile.tag == "video")
         {
-            printFixedState("video");
+            //printFixedState("video");
             GameObject.Find("VideoManager").GetComponent<VideoManager>().callMethodForGameObject(chosenFile);
         }
         else if (chosenFile.tag == "bluetooth")
         {
-            printFixedState("bluetooth");
+            //printFixedState("bluetooth");    
             GameObject.Find("BluetoothManager").GetComponent<NativeAndroidBluetooth>().callMethodForGameObject(chosenFile);
         }
         else if (chosenFile.tag == "audio")
         {
-            printFixedState("audio");
+            //printFixedState("audio");
             GameObject.Find("AudioManager").GetComponent<AudioManagerScript>().callMethodForGameObject(chosenFile);
         }
         else if (chosenFile.tag == "document")
         {
-            printFixedState("document");
+            //printFixedState("document");
             GameObject.Find("DocumentManager").GetComponent<DocumentManager>().callMethodForGameObject(chosenFile);
         }
     }
@@ -183,15 +182,19 @@ public class FolderManager : MonoBehaviour
             callAnimation(state);
             reverseAnimation(name);
             state = name;
-            printState();
+            //printState();
             GameObject.Find("DataManager").GetComponent<DataManager>().setGameObject(state);
         }
         else if (state == name && state != "menu")
         {
+            if(state == "BubbleExplorerForVideo")
+            {
+                GameObject.Find("VideoManager").GetComponent<VideoManager>().stopVideos();
+            }
             callAnimation(state);
             reverseAnimation("menu");
             state = "menu";
-            printState();
+            //printState();
             GameObject.Find("DataManager").GetComponent<DataManager>().setGameObject(state);
         }
     }
