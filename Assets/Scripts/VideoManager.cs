@@ -5,7 +5,7 @@ using UnityEngine.Video;
 
 public class VideoManager : MonoBehaviour {
 
-    GameObject videoPlaceholder, fullscreenPlaceholder;
+    GameObject videoPlaceholder, touchArea, videoAudio;
     VideoPlayer player;
 
     public RenderTexture previewTexture;
@@ -18,10 +18,11 @@ public class VideoManager : MonoBehaviour {
         videoPlaceholder = GameObject.Find("VideoPlaceholder");
         videoPlaceholder.SetActive(false);
 
-        fullscreenPlaceholder = GameObject.Find("VideoLandscapePlaceholder");
-        fullscreenPlaceholder.SetActive(false);
+        touchArea = GameObject.Find("TouchAreaMenu");
 
-		foreach(GameObject preview in GameObject.FindGameObjectsWithTag("videoPreview"))
+        videoAudio = GameObject.Find("VideoAudioSource");
+
+        foreach(GameObject preview in GameObject.FindGameObjectsWithTag("videoPreview"))
         {
             GameObject parent = preview.transform.parent.gameObject;
             VideoPlayer currentPlayer = preview.GetComponent<VideoPlayer>();
@@ -49,14 +50,18 @@ public class VideoManager : MonoBehaviour {
         {
             player.Pause();
         }
-        else if(player.frame >= 1)
+        else if(player.frame > 10)
         {
             videoPlaceholder.SetActive(true);
             player.Play();
         }
         else
         {
-            displayVideoLandscape(false);
+            player.renderMode = VideoRenderMode.RenderTexture;
+            player.targetTexture = fullVideoTexture;
+            videoPlaceholder.SetActive(true);
+            player.Play();
+
         }
         
     }
@@ -70,31 +75,25 @@ public class VideoManager : MonoBehaviour {
     {
         foreach(GameObject videoPlayer in GameObject.FindGameObjectsWithTag("videoPreview"))
         {
+            videoPlaceholder.SetActive(false);
             videoPlayer.GetComponent<VideoPlayer>().Stop();
         }
     }
 
-    public void displayVideoLandscape(bool landscape = true)
+    public void displayVideoLandscape(bool landscape)
     {
-        if(landscape)
+        if (landscape == true)
         {
-            VideoPlayer playingPlayer = null;
 
-            foreach (GameObject videoPlayer in GameObject.FindGameObjectsWithTag("videoPreview"))
+            if (player != null)
             {
-                VideoPlayer player = videoPlayer.GetComponent<VideoPlayer>();
-                if (player.isPlaying)
-                {
-                    playingPlayer = player;
-                    break;
-                }
-            }
-
-            if (playingPlayer != null)
-            {
-                playingPlayer.renderMode = VideoRenderMode.CameraFarPlane;
+                touchArea.SetActive(false);
+                //GameObject.Find("MainImageTarget").SetActive(false);
+                videoPlaceholder.SetActive(false);
+                player.renderMode = VideoRenderMode.CameraNearPlane;
                 //playingPlayer.targetTexture = fullVideoTexture;
-                playingPlayer.aspectRatio = VideoAspectRatio.FitVertically;
+                player.targetCamera = GameObject.Find("ARCamera").GetComponent<Camera>();
+                //playingPlayer.aspectRatio = VideoAspectRatio.FitVertically;
                 //fullscreenPlaceholder.SetActive(true);
                 //fullscreenPlaceholder.GetComponent<Image>
                 //playingPlayer.Play();
@@ -102,11 +101,14 @@ public class VideoManager : MonoBehaviour {
         }
         else
         {
+            touchArea.SetActive(true);
+            //GameObject.Find("MainImageTarget").SetActive(true);
             player.renderMode = VideoRenderMode.RenderTexture;
+            player.targetCamera = null;
             player.targetTexture = fullVideoTexture;
-            player.frame = 1;
+            //player.frame = 1;
             videoPlaceholder.SetActive(true);
-            player.Play();
+            //player.Play();
         }
     }
 }

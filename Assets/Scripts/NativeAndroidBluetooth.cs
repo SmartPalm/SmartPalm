@@ -20,6 +20,7 @@ public class NativeAndroidBluetooth : MonoBehaviour
     private string[] deviceNames;
     private bool currentlySearching = false;
     private bool stateOfIcon = false;
+    private float startTime = 0.0f;
 
 
     private void Start()
@@ -44,13 +45,9 @@ public class NativeAndroidBluetooth : MonoBehaviour
 
         updateCurrentlySearching();
 
-        if (Input.deviceOrientation == DeviceOrientation.LandscapeLeft || Input.deviceOrientation == DeviceOrientation.LandscapeRight)
+        if (Time.time - startTime > 10.0f)
         {
-            // landscape
-        }
-        else
-        {
-            // not landscape
+
         }
     }
 
@@ -58,7 +55,7 @@ public class NativeAndroidBluetooth : MonoBehaviour
     {
         if (obj.name.Equals("SphereForChangeSearchState"))
         {
-            changeIconDisplay();
+            //changeIconDisplay();
             if (currentlySearching)
             {
                 stopGetPairedDevices();
@@ -81,12 +78,13 @@ public class NativeAndroidBluetooth : MonoBehaviour
             AndroidJavaObject btService = btServiceClass.CallStatic<AndroidJavaObject>("getInstance");
             AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
 
-            currentlySearching = btService.CallStatic<bool>("getCurrentlyScanningForNearbyDevices");
-        }
-
-        if (!currentlySearching)
-        {
-            //_searchingLabel.text = "";
+            bool oldSearching = currentlySearching;
+            currentlySearching = btService.GetStatic<bool>("getCurrentlyScanningForNearbyDevices");
+            if (oldSearching != currentlySearching)
+            {
+                changeIconDisplay();
+            }
+            _deviceList.text = currentlySearching.ToString();
         }
     }
 
@@ -95,12 +93,18 @@ public class NativeAndroidBluetooth : MonoBehaviour
         jsonOfNearbyDevices = jsonOfNearbyDevices.Replace("[", "");
         jsonOfNearbyDevices = jsonOfNearbyDevices.Replace("]", "");
         jsonOfNearbyDevices = jsonOfNearbyDevices.Replace("\"", "");
-        deviceNames = jsonOfNearbyDevices.Split(',');
-        _deviceList.text = "";
+        /*if (currentlySearching)
+        {
+            _deviceList.text = "Searching ...";
+        }
+        else
+        {
+            _deviceList.text = "";
+        }
         foreach (string device in deviceNames)
         {
             _deviceList.text = _deviceList.text + device + "\n";
-        }
+        }*/
     }
 
     private void changeIconDisplay()
@@ -136,7 +140,7 @@ public class NativeAndroidBluetooth : MonoBehaviour
             btService.Call("startGettingPairedDevices");
             //_searchingLabel.text = "Searching for devices...";
             jsonOfNearbyDevices = "";
-            _deviceList.text = "Bluetoothgeräte";
+            startTime = Time.time;
         }
     }
 

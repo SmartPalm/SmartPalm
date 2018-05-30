@@ -230,7 +230,7 @@ public class TouchController : MonoBehaviour {
                     Screen.orientation = ScreenOrientation.LandscapeLeft;
                     switchXOrientation = switchYOrientation = false;
                     //orientation.text = "Landscape";
-                    GameObject.Find("VideoManager").GetComponent<VideoManager>().displayVideoLandscape();
+                    GameObject.Find("VideoManager").GetComponent<VideoManager>().displayVideoLandscape(true);
                     EventManager.TriggerEvent(ORIENTATION_LANDSCAPE, 0);
                 }
                 else if ((startTouch1.x - touch1.position.x) < -X_SWIPE_DIFFERENCE && (startTouch2.x - touch2.position.x) < -X_SWIPE_DIFFERENCE && (startTouch3.x - touch3.position.x) < -X_SWIPE_DIFFERENCE && Screen.orientation == ScreenOrientation.Landscape)
@@ -238,6 +238,7 @@ public class TouchController : MonoBehaviour {
                     Screen.orientation = ScreenOrientation.Portrait;
                     switchXOrientation = switchYOrientation = false;
                     //orientation.text = "Portrait";
+                    GameObject.Find("VideoManager").GetComponent<VideoManager>().displayVideoLandscape(false);
                     EventManager.TriggerEvent(ORIENTATION_PORTRAIT, 0);
                 }
             }
